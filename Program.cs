@@ -14,6 +14,10 @@ builder.Services.AddDbContext<BaseContext>(options =>
         Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.20-mysql")));
   
 
+
+
+//builder.Services.AddAutoMapper(typeof(StudentP rofile), typeof(Teacher Profile), typeof(ClassProfile));
+
 var app = builder.Build();
 app.MapControllers();
 
