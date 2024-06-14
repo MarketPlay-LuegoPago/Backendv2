@@ -93,7 +93,7 @@ CREATE TABLE PurchaseCoupon (
 );
 
 -- Tabla Coupons_sent
-CREATE TABLE Coupons_sent (
+CREATE TABLE CouponsSent (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     couponid INT,
