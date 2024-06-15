@@ -11,5 +11,10 @@ namespace Backengv2.Services.Coupons
     public interface ICouponRepository
     {
         Task<IEnumerable<Coupon>> GetAllCouponsAsync();
+        Task<IEnumerable<Coupon>> GetCouponsByDateRangeAsync(DateTime? startDate, DateTime? endDate);
+        Task<IEnumerable<Coupon>> GetCouponsByCreatorNameAsync(string creatorName); 
+        Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime activationDate);
+        Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime expirationDate);
+        Task<IEnumerable<Coupon>> GetCouponsActiveAsync();
     }
 }

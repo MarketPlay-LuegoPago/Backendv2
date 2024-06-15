@@ -14,6 +14,7 @@ namespace Backengv2.Dtos
           public DateTime expiration_date { get; set; }
           public decimal discount_value { get; set; }
           public int current_redemptions { get; set; }
+          public string? MarketingUsername { get; set; }
         
     }
 }
