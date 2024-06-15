@@ -1,5 +1,5 @@
-// File: Data/CouponRepository.cs
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backengv2.Data;
@@ -16,6 +16,61 @@ public class CouponRepository : ICouponRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Coupon>> GetAllCouponsAsync()
+    {
+        return await _context.Coupons.Include(c => c.MarketingUser).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Coupon>> GetCouponsByDateRangeAsync(DateTime? startDate, DateTime? endDate)
+    {
+        IQueryable<Coupon> query = _context.Coupons.Include(c => c.MarketingUser);
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(c => c.ActivationDate >= startDate);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(c => c.Expiration_date <= endDate);
+        }
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<IEnumerable<Coupon>> GetCouponsByCreatorNameAsync(string creatorName)
+    {
+        return await _context.Coupons.Include(c => c.MarketingUser)
+                                     .Where(c => c.MarketingUser.Username == creatorName)
+                                     .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime activationDate)
+    {
+        return await _context.Coupons.Include(c => c.MarketingUser)
+                                     .Where(c => c.ActivationDate == activationDate.Date)
+                                     .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime expirationDate)
+    {
+        return await _context.Coupons.Include(c => c.MarketingUser)
+                                     .Where(c => c.Expiration_date == expirationDate.Date)
+                                     .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Coupon>> GetCouponsActiveAsync()
+    {
+        return await _context.Coupons.Include(c => c.MarketingUser)
+                                     .Where(c => c.Status == "active")
+                                     .ToListAsync();
+    }
+
+    public async Task AddCouponAsync(Coupon coupon)
+    {
+        await _context.Coupons.AddAsync(coupon);
+        await _context.SaveChangesAsync();
+    }
 
     public async Task<Coupon> GetByIdAsync(int id)
     {
@@ -34,54 +89,6 @@ public class CouponRepository : ICouponRepository
         // Verifica si el cupón ha sido redimido
         if (existingCoupon.Status == "redimido")
         {
-           return await _context.Coupons.Include(c => c.MarketingUser).ToListAsync();
-        }
-
-         public async Task<IEnumerable<Coupon>> GetCouponsByDateRangeAsync(DateTime? startDate, DateTime? endDate)
-        {
-            IQueryable<Coupon> query = _context.Coupons.Include(c => c.MarketingUser);
-
-            if (startDate.HasValue)
-            {
-                query = query.Where(c => c.activation_date >= startDate);
-            }
-
-            if (endDate.HasValue)
-            {
-                query = query.Where(c => c.expiration_date <= endDate);
-            }
-
-            return await query.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Coupon>> GetCouponsByCreatorNameAsync(string creatorName)
-        {
-            return await _context.Coupons.Include(c => c.MarketingUser)
-                                         .Where(c => c.MarketingUser.Username == creatorName)
-                                         .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime activationDate)
-        {
-            return await _context.Coupons.Include(c => c.MarketingUser)
-                                         .Where(c => c.activation_date == activationDate.Date)
-                                         .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime expirationDate)
-        {
-            return await _context.Coupons.Include(c => c.MarketingUser)
-                                         .Where(c => c.expiration_date == expirationDate.Date)
-                                         .ToListAsync();
-        }
-
-         public async Task<IEnumerable<Coupon>> GetCouponsActiveAsync()
-        {
-            return await _context.Coupons.Include(c => c.MarketingUser)
-                                         .Where(c => c.status == "active")
-                                         .ToListAsync();
-        }
-
             throw new Exception("El cupón no se puede editar porque ya ha sido utilizado.");
         }
 
@@ -90,6 +97,8 @@ public class CouponRepository : ICouponRepository
 
         // Realiza el guardado en la base de datos
         await _context.SaveChangesAsync();
-
     }
+
+
+
 }

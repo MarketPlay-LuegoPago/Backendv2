@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Backengv2.Profiles;
 using Backengv2.Services.Coupons;
 using Microsoft.AspNetCore.Mvc;
-using Backengv2.Utilidades;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(CouponProfile)); 
+//builder.Services.AddAutoMapper(typeof(CouponProfile)); 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
@@ -35,7 +34,7 @@ builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
 
 var app = builder.Build();
-app.UseMiddleware<ErrorHandlingMiddleware>();
+//app.UseMiddleware<ErrorHandlingMiddleware>();
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
