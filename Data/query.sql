@@ -17,7 +17,7 @@ CREATE TABLE MarketingUser (
 
 -- Tabla Coupons
 CREATE TABLE Coupons (
-    coupon_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(45),
     description VARCHAR(45),
     creation_date DATE,
@@ -36,15 +36,23 @@ CREATE TABLE Coupons (
     FOREIGN KEY (MarketingUserId) REFERENCES MarketingUser(id)
 );
 
+drop Table Coupons
+
+drop Table CouponsSent
+
+
+
+
+
 -- Tabla CouponHistory
 CREATE TABLE CouponHistory (
-    PK INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     couponId INT,
     change_date DATE,
     field_changed VARCHAR(45),
     old_value VARCHAR(45),
     new_value VARCHAR(45),
-    FOREIGN KEY (couponId) REFERENCES Coupons(coupon_id)
+    FOREIGN KEY (couponId) REFERENCES Coupons(id)
 );
 
 -- Tabla UserRole
@@ -98,7 +106,7 @@ CREATE TABLE CouponsSent (
     user_id INT,
     couponid INT,
     FOREIGN KEY (user_id) REFERENCES MarketplaceUser(id),
-    FOREIGN KEY (couponid) REFERENCES Coupons(coupon_id)
+    FOREIGN KEY (couponid) REFERENCES Coupons(id)
 );
 
 
