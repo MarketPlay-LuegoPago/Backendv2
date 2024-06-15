@@ -1,5 +1,12 @@
-using Backeng.Data;
+using Backengv2.Data;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using Backengv2.Profiles;
+using Backengv2.Services.Coupons;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,13 +15,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+
 builder.Services.AddDbContext<BaseContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("MySqlConnection"),
         Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.20-mysql")));
   
-
-
 
 //builder.Services.AddAutoMapper(typeof(StudentP rofile), typeof(Teacher Profile), typeof(ClassProfile));
 
@@ -30,29 +39,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+/* dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection */

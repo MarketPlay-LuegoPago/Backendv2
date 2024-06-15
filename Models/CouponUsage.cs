@@ -14,7 +14,7 @@ namespace Backengv2.Models
       public DateTime UsageDate { get; set; }
       public decimal TransactionAmount { get; set; }
       public string? Status { get; set; }
-      public Coupons? Coupon { get; set; }
+      public Coupon? Coupon { get; set; }
       public MarketplaceUser? User { get; set; }
     }
 }

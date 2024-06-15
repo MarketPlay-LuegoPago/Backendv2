@@ -100,3 +100,9 @@ CREATE TABLE CouponsSent (
     FOREIGN KEY (user_id) REFERENCES MarketplaceUser(id),
     FOREIGN KEY (couponid) REFERENCES Coupons(coupon_id)
 );
+
+
+
+INSERT INTO `Coupons`(`name`,`description`,`creation_date`,`activation_date`,`expiration_date`,`discount_type`,`discount_value`,`use_type`,`quantity_uses`,`min_purchase_amount`,`max_purchase_amount`,`status`,`MarketingUserId`,`redemption_limit`,`current_redemptions`) VALUES('Cumpleaños 2','descuento compra','2024-06-14','2024-06-14','2024-07-14','NET',20.000,'limited',3,100000,200000,'active',1,3,0);
+
+INSERT INTO `Coupons`(`name`,`description`,`creation_date`,`activation_date`,`expiration_date`,`discount_type`,`discount_value`,`use_type`,`quantity_uses`,`min_purchase_amount`,`max_purchase_amount`,`status`,`redemption_limit`,`current_redemptions`,`MarketingUserId`) VALUES('Descuento','Descuento por cumpleaños','2024-06-14','2024-06-14','2024-07-14','NET',20.000,'limited',3,100000,200000,'active',3,0,1);
