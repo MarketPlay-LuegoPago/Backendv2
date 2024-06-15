@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Backengv2.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backeng.Data
@@ -12,5 +9,6 @@ namespace Backeng.Data
         {
 
         }
+        public DbSet <MarketingUser> MarketingUser {get; set; }
     }
 }
