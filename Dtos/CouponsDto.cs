@@ -7,21 +7,21 @@ namespace Backengv2.Dtos
 {
     public class CouponsDto
     {
-         public int CouponId { get; set; }
-          public string? Name { get; set; }
-          public string? Description { get; set; }
-          public DateTime CreationDate { get; set; }
-          public DateTime ActivationDate { get; set; }
-          public DateTime ExpirationDate { get; set; }
-          public string? DiscountType { get; set; }
-          public decimal DiscountValue { get; set; }
-          public string? UseType { get; set; }
-          public int QuantityUses { get; set; }
-          public decimal MinPurchaseAmount { get; set; }
-          public decimal MaxPurchaseAmount { get; set; }
-          public string? Status { get; set; }
-          public int RedemptionLimit { get; set; }
-          public int CurrentRedemptions { get; set; }
+         public int id { get; set; }
+          public string? name { get; set; }
+          public string? description { get; set; }
+          public DateTime creation_date { get; set; }
+          public DateTime activation_date { get; set; }
+          public DateTime expiration_date { get; set; }
+          public string? discount_type { get; set; }
+          public decimal discount_value { get; set; }
+          public string? use_type { get; set; }
+          public int quantity_uses { get; set; }
+          public decimal min_purchase_amount { get; set; }
+          public decimal max_purchase_amount { get; set; }
+          public string? status { get; set; }
+          public int redemption_limit { get; set; }
+          public int current_redemptions { get; set; }
           public int MarketingUserId { get; set; } = 0;
     }
 }
