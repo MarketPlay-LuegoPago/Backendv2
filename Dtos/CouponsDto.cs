@@ -22,6 +22,6 @@ namespace Backengv2.Dtos
           public string? status { get; set; }
           public int redemption_limit { get; set; }
           public int current_redemptions { get; set; }
-          public int MarketingUserId { get; set; } = 0;
+         public string? MarketingUsername { get; set; }
     }
 }
