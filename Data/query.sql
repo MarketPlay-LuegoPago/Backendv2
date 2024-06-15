@@ -8,12 +8,15 @@ CREATE TABLE MarketplaceUser (
 );
 
 -- Tabla MarketingUser
+--Tabla empleados
 CREATE TABLE MarketingUser (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(45),
     email VARCHAR(45),
     password VARCHAR(55)
 );
+SELECT * FROM MarketingUser;
+
 
 -- Tabla Coupons
 CREATE TABLE Coupons (
