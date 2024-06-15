@@ -7,7 +7,7 @@ namespace Backengv2.Dtos
 {
     public class CouponsDto
     {
-         public int CouponId { get; set; }
+         public int id { get; set; }
           public string? Name { get; set; }
           public string? Description { get; set; }
           public DateTime CreationDate { get; set; }

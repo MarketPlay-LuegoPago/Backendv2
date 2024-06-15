@@ -9,7 +9,7 @@ namespace Backengv2.Models
     public class CouponHistory
     {
     [Key]
-    public int Pk { get; set; }
+    public int id { get; set; }
     public int CouponId { get; set; }
     public DateTime ChangeDate { get; set; }
     public string? FieldChanged { get; set; }
