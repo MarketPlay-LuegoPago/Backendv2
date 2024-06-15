@@ -14,13 +14,29 @@ namespace Backengv2.Profiles
 
             // Mapeo para CouponDetailDto
             CreateMap<Coupon, CouponDetailDto>()
-                .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.name))
-                .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.description))
-                .ForMember(dest => dest.activation_date, opt => opt.MapFrom(src => src.activation_date))
-                .ForMember(dest => dest.expiration_date, opt => opt.MapFrom(src => src.expiration_date))
-                .ForMember(dest => dest.discount_value, opt => opt.MapFrom(src => src.discount_value))
-                .ForMember(dest => dest.current_redemptions, opt => opt.MapFrom(src => src.current_redemptions))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Activation_date, opt => opt.MapFrom(src => src.ActivationDate))
+                .ForMember(dest => dest.Expiration_date, opt => opt.MapFrom(src => src.Expiration_date))
+                .ForMember(dest => dest.Discount_value, opt => opt.MapFrom(src => src.DiscountValue))
+                .ForMember(dest => dest.Current_redemptions, opt => opt.MapFrom(src => src.CurrentRedemptions))
                 .ForMember(dest => dest.MarketingUsername, opt => opt.MapFrom(src => src.MarketingUser.Username));
+
+               CreateMap<CouponCreateDto, Coupon>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
+                .ForMember(dest => dest.ActivationDate, opt => opt.MapFrom(src => src.ActivationDate))
+                .ForMember(dest => dest.Expiration_date, opt => opt.MapFrom(src => src.ExpirationDate))
+                .ForMember(dest => dest.DiscountType, opt => opt.MapFrom(src => src.DiscountType))
+                .ForMember(dest => dest.DiscountValue, opt => opt.MapFrom(src => src.DiscountValue))
+                .ForMember(dest => dest.UseType, opt => opt.MapFrom(src => src.UseType))
+                .ForMember(dest => dest.Quantity_uses, opt => opt.MapFrom(src => src.QuantityUses))
+                .ForMember(dest => dest.MinPurchaseAmount, opt => opt.MapFrom(src => src.MinPurchaseAmount))
+                .ForMember(dest => dest.MaxPurchaseAmount, opt => opt.MapFrom(src => src.MaxPurchaseAmount))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.RedemptionLimit, opt => opt.MapFrom(src => src.RedemptionLimit))
+                .ForMember(dest => dest.MarketingUserId, opt => opt.MapFrom(src => src.MarketingUserId));
         }
     }
 }
