@@ -13,6 +13,6 @@ namespace Backengv2.Models
       public int UserId { get; set; }
       public int CouponId { get; set; }
       public MarketplaceUser? User { get; set; }
-      public Coupons? Coupon { get; set; }
+      public Coupon? Coupon { get; set; }
     }
 }

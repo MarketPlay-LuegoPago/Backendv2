@@ -16,7 +16,7 @@ CREATE TABLE MarketingUser (
 );
 
 -- Tabla Coupons
-CREATE TABLE Coupons (
+CREATE TABLE Coupon (
     coupon_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(45),
     description VARCHAR(45),

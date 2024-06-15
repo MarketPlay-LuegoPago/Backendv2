@@ -15,6 +15,6 @@ namespace Backengv2.Models
     public string? FieldChanged { get; set; }
     public string? OldValue { get; set; }
     public string? NewValue { get; set; }
-    public Coupons? Coupon { get; set; }
+    public Coupon? Coupon { get; set; }
     }
 }

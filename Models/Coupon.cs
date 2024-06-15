@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Backengv2.Models
 {
-    public class Coupons
+    public class Coupon
     {
         [Key]
-        public int Coupon_id { get; set; }
+        public int CouponId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public DateTime CreationDate { get; set; }
