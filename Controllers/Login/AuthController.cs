@@ -36,8 +36,8 @@ namespace Authcontroller
                     //new Claim(ClaimTypes.NameIdentifier.MarketingUser.id.toString())  
                 };
                 var TokenConfigure = new JwtSecurityToken(
-                    issuer: "",
-                    audience: "",   //Aqui van los endPoints
+                    issuer: "http://localhost:5090",
+                    audience: "http://localhost:5090",
                     claims : new List<Claim>(),
                     expires : DateTime.Now.AddHours(1), 
                     signingCredentials : signinCredentials
