@@ -32,7 +32,7 @@ public class CouponRepository : ICouponRepository
 
         if (endDate.HasValue)
         {
-            query = query.Where(c => c.Expiration_date <= endDate);
+            query = query.Where(c => c.expiration_date <= endDate);
         }
 
         return await query.ToListAsync();
@@ -55,22 +55,49 @@ public class CouponRepository : ICouponRepository
     public async Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime expirationDate)
     {
         return await _context.Coupons.Include(c => c.MarketingUser)
-                                     .Where(c => c.Expiration_date == expirationDate.Date)
+                                     .Where(c => c.expiration_date == expirationDate.Date)
                                      .ToListAsync();
     }
 
     public async Task<IEnumerable<Coupon>> GetCouponsActiveAsync()
     {
         return await _context.Coupons.Include(c => c.MarketingUser)
-                                     .Where(c => c.Status == "active")
+                                     .Where(c => c.status == "active")
                                      .ToListAsync();
     }
 
-    public async Task AddCouponAsync(Coupon coupon)
-    {
-        await _context.Coupons.AddAsync(coupon);
-        await _context.SaveChangesAsync();
-    }
+      public async Task AddCouponAsync(Coupon coupon)
+      {
+          using (var transaction = await _context.Database.BeginTransactionAsync())
+          {
+              try
+              {
+                  await _context.Coupons.AddAsync(coupon);
+                  await _context.SaveChangesAsync();
+
+                  // Agregar entrada en CouponHistory
+                  var couponHistory = new CouponHistory
+                  {
+                      CouponId = coupon.id,
+                      ChangeDate = DateTime.UtcNow,
+                      FieldChanged = "Created",
+                      OldValue = coupon.DiscountValue,
+                      NewValue = "Coupon Created"
+                  };
+
+                  await _context.CouponHistories.AddAsync(couponHistory);
+                  await _context.SaveChangesAsync();
+
+                  await transaction.CommitAsync();
+              }
+              catch (Exception)
+              {
+                  await transaction.RollbackAsync();
+                  throw;
+              }
+          }
+      }
+
 
     public async Task<Coupon> GetByIdAsync(int id)
     {
@@ -87,7 +114,7 @@ public class CouponRepository : ICouponRepository
         }
 
         // Verifica si el cupón ha sido redimido
-        if (existingCoupon.Status == "redimido")
+        if (existingCoupon.status == "redimido")
         {
             throw new Exception("El cupón no se puede editar porque ya ha sido utilizado.");
         }
@@ -96,6 +123,19 @@ public class CouponRepository : ICouponRepository
         _context.Entry(existingCoupon).CurrentValues.SetValues(couponEntity);
 
         // Realiza el guardado en la base de datos
+        await _context.SaveChangesAsync();
+
+        // Agregar entrada en CouponHistory
+        var couponHistory = new CouponHistory
+        {
+            CouponId = existingCoupon.id,
+            ChangeDate = DateTime.UtcNow,
+            FieldChanged = "Updated",
+            OldValue = existingCoupon.DiscountValue, 
+            NewValue = "Coupon Updated"
+        };
+
+        await _context.CouponHistories.AddAsync(couponHistory);
         await _context.SaveChangesAsync();
     }
 
