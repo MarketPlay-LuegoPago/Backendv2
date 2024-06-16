@@ -1,4 +1,3 @@
-// File: Controllers/Coupons/CouponUpdateController.cs
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace Backengv2.Controllers.Coupons
 {
     [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public class CouponUpdateController : ControllerBase
 {
     private readonly ICouponRepository _couponRepository;
@@ -29,13 +28,13 @@ public class CouponUpdateController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCoupon(int id, [FromBody] CouponsDto couponsDto)
     {
-        var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim == null)
         {
             return Unauthorized("Usuario no autenticado.");
         }
 
-        var userId = int.Parse(userIdClaim);
+        var userId = int.Parse(userIdClaim); 
 
         var coupon = await _couponRepository.GetByIdAsync(id);
         if (coupon == null)
@@ -43,12 +42,12 @@ public class CouponUpdateController : ControllerBase
             return NotFound("Cupón no encontrado.");
         }
 
-        if (coupon.MarketingUserId != userId)
+       if (coupon.MarketingUserId != userId)
         {
             return Forbid("No tienes permiso para editar este cupón.");
-        }
+        } 
 
-        if (coupon.Status == "redimido")
+        if (coupon.status == "redimido")
         {
             return BadRequest("El cupón no se puede editar porque ya ha sido utilizado.");
         }
@@ -60,6 +59,7 @@ public class CouponUpdateController : ControllerBase
         try
         {
             await _couponRepository.UpdateCouponAsync(couponEntity);
+
             return Ok("Cupón actualizado correctamente.");
         }
         catch (Exception ex)
@@ -74,3 +74,4 @@ public class CouponUpdateController : ControllerBase
 
     
 
+ 

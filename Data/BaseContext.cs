@@ -13,7 +13,7 @@ namespace Backengv2.Data
         {
           
         }
-        public DbSet<MarketplaceUser> MarketplaceUsers { get; set; }
+        public DbSet<MarketplaceUser> MarketplaceUser { get; set; }
         public DbSet<MarketingUser> MarketingUsers { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<CouponHistory> CouponHistories { get; set; }

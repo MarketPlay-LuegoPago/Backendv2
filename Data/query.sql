@@ -6,6 +6,8 @@ CREATE TABLE MarketplaceUser (
     email VARCHAR(85),
     password VARCHAR(55)
 );
+drop table MarketingUser
+
 
 -- Tabla MarketingUser
 CREATE TABLE MarketingUser (
@@ -41,6 +43,13 @@ drop Table Coupons
 drop Table CouponsSent
 
 
+INSERT INTO MarketplaceUser (username, Email, password) 
+VALUES 
+    ('dina','dinamartinezpant','123'),
+    ('Mateo','mateo.velez.censa@gmail.com','123'),
+    ('Juan','juanpabloint@gmail.com ','123')
+    
+
 
 
 
@@ -52,8 +61,16 @@ CREATE TABLE CouponHistory (
     field_changed VARCHAR(45),
     old_value VARCHAR(45),
     new_value VARCHAR(45),
+    changed_by_user INT,
     FOREIGN KEY (couponId) REFERENCES Coupons(id)
 );
+
+ALTER TABLE CouponHistories
+CHANGE COLUMN OldValue OldValue VARCHAR(55);
+
+ALTER TABLE CouponHistories
+ADD COLUMN changed_by_user INT;
+
 
 -- Tabla UserRole
 CREATE TABLE UserRole (

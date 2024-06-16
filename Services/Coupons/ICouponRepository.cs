@@ -11,6 +11,10 @@ namespace Backengv2.Services.Coupons
 {
     public interface ICouponRepository
     {
-        Task<Coupon?> GetByIdAsync(int id);
-        Task UpdateCouponAsync(Coupon coupon);
-}}
+        Task<Coupon> GetByIdAsync(int id);
+        Task UpdateCouponAsync(Coupon couponEntity);
+        
+
+        Task<bool> SendCouponToCustomersAsync(int couponId, string message, List<int> customerIds);
+}
+}
