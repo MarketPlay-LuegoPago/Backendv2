@@ -23,5 +23,16 @@ namespace Backengv2.Data
         public DbSet<CouponUsage> CouponUsages { get; set; }
         public DbSet<PurchaseCoupon> PurchaseCoupons { get; set; }
         public DbSet<CouponsSent> CouponsSent { get; set; }
+         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Coupon>()
+                .HasMany(c => c.CouponHistories)
+                .WithOne(ch => ch.Coupon)
+                .HasForeignKey(ch => ch.CouponId);
+        }
     }
+
+    
 }

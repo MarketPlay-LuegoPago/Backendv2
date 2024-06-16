@@ -48,7 +48,7 @@ public class CouponUpdateController : ControllerBase
             return Forbid("No tienes permiso para editar este cupón.");
         }
 
-        if (coupon.Status == "redimido")
+        if (coupon.status == "redimido")
         {
             return BadRequest("El cupón no se puede editar porque ya ha sido utilizado.");
         }

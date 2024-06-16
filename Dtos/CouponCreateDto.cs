@@ -20,7 +20,7 @@ namespace Backengv2.Dtos
         public DateTime ActivationDate { get; set; }
 
         [Required]
-        public DateTime ExpirationDate { get; set; }
+        public DateTime expiration_date { get; set; }
 
         [Required]
         public string? DiscountType { get; set; }
@@ -41,10 +41,13 @@ namespace Backengv2.Dtos
         public decimal MaxPurchaseAmount { get; set; }
 
         [Required]
-        public string? Status { get; set; }
+        public string? status { get; set; }
 
         [Required]
         public int RedemptionLimit { get; set; }
+        
+        [Required]
+        public int CurrentRedemptions { get; set; }
 
         [Required]
         public int MarketingUserId { get; set; }
