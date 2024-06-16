@@ -1,3 +1,4 @@
+use bjhodx0hwf028sg5szmr;
 
 -- Tabla MarketplaceUser
 CREATE TABLE MarketplaceUser (
@@ -6,6 +7,7 @@ CREATE TABLE MarketplaceUser (
     email VARCHAR(85),
     password VARCHAR(55)
 );
+select * from MarketplaceUser;
 
 -- Tabla MarketingUser
 --Tabla empleados
@@ -15,7 +17,10 @@ CREATE TABLE MarketingUser (
     email VARCHAR(45),
     password VARCHAR(55)
 );
+INSERT INTO MarketingUser VALUES (1, "Mateo", "mateo@gmail.com","123");
 SELECT * FROM MarketingUser;
+
+
 
 
 -- Tabla Coupons
