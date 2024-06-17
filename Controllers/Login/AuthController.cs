@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Backengv2.Data;
+using Backengv2.Models;
 using Microsoft.EntityFrameworkCore;
 using backend.Dto;
 using Backend.Services;
@@ -19,7 +20,7 @@ namespace Authcontroller
         [HttpPost("Login")]
          public async Task <IActionResult>Login([FromBody] Login login) 
          {
-            var user = await _context.MarketingUser.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
+            var user = await _context.MarketingUsers.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
             if( user == null)
             {
                 return Unauthorized("The Query is invalid or the user doesn´t exist");

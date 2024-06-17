@@ -29,7 +29,7 @@ namespace Backengv2.Data
                 .WithOne(ch => ch.Coupon)
                 .HasForeignKey(ch => ch.CouponId);
         }
-        public DbSet <MarketingUser> MarketingUser {get; set; }
+       // public DbSet <MarketingUser> MarketingUser {get; set; }
     }
 
     
