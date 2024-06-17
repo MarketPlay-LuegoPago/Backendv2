@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Backengv2.Models;
+using Backengv2.Dtos;
 
 namespace Backengv2.Data
 {
@@ -27,10 +28,18 @@ namespace Backengv2.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Definir la relación entre Coupon y CouponHistory
             modelBuilder.Entity<Coupon>()
                 .HasMany(c => c.CouponHistories)
                 .WithOne(ch => ch.Coupon)
                 .HasForeignKey(ch => ch.CouponId);
+
+            // Definir la relación entre Coupon y MarketingUser
+            modelBuilder.Entity<Coupon>()
+                .HasOne(c => c.MarketingUser)
+                .WithMany()
+                .HasForeignKey(c => c.MarketingUserId);
+
         }
     }
 
