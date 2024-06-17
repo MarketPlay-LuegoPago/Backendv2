@@ -56,40 +56,44 @@ namespace Backengv2.Services.Coupons
     }
 
 
-      public async Task AddCouponAsync(Coupon coupon)
-      {
-          using (var transaction = await _context.Database.BeginTransactionAsync())
-          {
-              try
-              {
-                  await _context.Coupons.AddAsync(coupon);
-                  await _context.SaveChangesAsync();
+     public async Task AddCouponAsync(Coupon coupon)
+{
+    using (var transaction = await _context.Database.BeginTransactionAsync())
+    {
+        try
+        {
+            // Agregar el cupón a la base de datos
+            await _context.Coupons.AddAsync(coupon);
+            await _context.SaveChangesAsync();
 
-                  // Agregar entrada en CouponHistory
-                  var couponHistory = new CouponHistory
-                  {
-                      CouponId = coupon.id,
-                      ChangeDate = DateTime.UtcNow,
-                      FieldChanged = "Created",
-                      OldValue = coupon.DiscountValue.ToString(),
-                      NewValue = "Coupon Created",
-                      ChangedByUser = coupon.MarketingUserId
-                  };
+            // Agregar entrada en CouponHistory
+            var couponHistory = new CouponHistory
+            {
+                CouponId = coupon.id,
+                ChangeDate = DateTime.UtcNow,
+                FieldChanged = "Created",
+                OldValue = coupon.DiscountValue.ToString(),
+                NewValue = "Coupon Created",
+                ChangedByUser = coupon.MarketingUserId
+            };
 
-                  await _context.CouponHistories.AddAsync(couponHistory);
-                  await _context.SaveChangesAsync();
+            await _context.CouponHistories.AddAsync(couponHistory);
+            await _context.SaveChangesAsync();
 
-                  await transaction.CommitAsync();
-              }
-              catch (Exception)
-              {
-                  await transaction.RollbackAsync();
-                  throw;
-              }
-          }
-          
-    
+            // Confirmar la transacción
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            // Revertir la transacción en caso de error
+            await transaction.RollbackAsync();
+            // Loguear el error para obtener más detalles
+            Console.WriteLine("Error al agregar el cupón: " + ex.Message);
+            throw;
+        }
     }
+}
+
 
 
 
@@ -118,9 +122,9 @@ namespace Backengv2.Services.Coupons
 
 
 
-    public async Task<Coupon> GetByIdAsync(int id)
+   public async Task<Coupon> GetByIdAsync(int id)
     {
-        return await _context.Coupons.SingleOrDefaultAsync(c => c.id == id);
+        return await _context.Coupons.Include(c => c.MarketingUser).SingleOrDefaultAsync(c => c.id == id);
     }
 
      public async Task UpdateCouponAsync(Coupon couponEntity)

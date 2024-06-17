@@ -148,3 +148,13 @@ CREATE TABLE CouponsSent (
 INSERT INTO `Coupons`(`name`,`description`,`creation_date`,`activation_date`,`expiration_date`,`discount_type`,`discount_value`,`use_type`,`quantity_uses`,`min_purchase_amount`,`max_purchase_amount`,`status`,`MarketingUserId`,`redemption_limit`,`current_redemptions`) VALUES('Cumpleaños 2','descuento compra','2024-06-14','2024-06-14','2024-07-14','NET',20.000,'limited',3,100000,200000,'active',1,3,0);
 
 INSERT INTO `Coupons`(`name`,`description`,`creation_date`,`activation_date`,`expiration_date`,`discount_type`,`discount_value`,`use_type`,`quantity_uses`,`min_purchase_amount`,`max_purchase_amount`,`status`,`redemption_limit`,`current_redemptions`,`MarketingUserId`) VALUES('Descuento','Descuento por cumpleaños','2024-06-14','2024-06-14','2024-07-14','NET',20.000,'limited',3,100000,200000,'active',3,0,1);
+
+
+INSERT INTO `Coupons`(
+    `Name`, `Description`, `CreationDate`, `ActivationDate`, `expiration_date`, `DiscountType`, 
+    `DiscountValue`, `UseType`, `quantity_uses`, `MinPurchaseAmount`, `MaxPurchaseAmount`, 
+    `status`, `RedemptionLimit`, `CurrentRedemptions`, `MarketingUserId`
+) VALUES (
+    'Cupon 1', 'descripcion CUpon 1', '2024-06-16', '2024-06-16', '2024-07-16', 'NET', 
+    22000, 'limited', 2, 100000, 200000, 'active', 0, 0, 1
+);
