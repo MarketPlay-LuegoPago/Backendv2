@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Backengv2.Profiles;
 using Backengv2.Services.Coupons;
 using Microsoft.AspNetCore.Mvc;
-using Backengv2.Utilidades;
+
 using Backengv2.Services;
 
 
@@ -19,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(CouponProfile)); 
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 

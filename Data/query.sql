@@ -19,21 +19,21 @@ CREATE TABLE MarketingUser (
 
 -- Tabla Coupons
 CREATE TABLE Coupons (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(45),
-    description VARCHAR(45),
-    creation_date DATE,
-    activation_date DATE,
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(45),
+    Description VARCHAR(45),
+    CreationDate DATE,
+    ActivationDate DATE,
     expiration_date DATE,
-    discount_type ENUM('NET', 'PERCENTUAL'),
-    discount_value DECIMAL(10, 2),
-    use_type ENUM('limited', 'unlimited'),
+    DiscountType ENUM('NET', 'PERCENTUAL'),
+    DiscountValue DECIMAL(10, 2),
+    UseType ENUM('limited', 'unlimited'),
     quantity_uses INT,
-    min_purchase_amount DECIMAL(10, 2),
-    max_purchase_amount DECIMAL(10, 2),
+    MinPurchaseAmount DECIMAL(10, 2),
+    MaxPurchaseAmount DECIMAL(10, 2),
     status ENUM('active', 'inactive', 'deleted'),
-    redemption_limit INT,
-    current_redemptions INT,
+    RedemptionLimit INT,
+    CurrentRedemptions INT,
     MarketingUserId INT,
     FOREIGN KEY (MarketingUserId) REFERENCES MarketingUser(id)
 );
@@ -49,18 +49,24 @@ VALUES
     ('Mateo','mateo.velez.censa@gmail.com','123'),
     ('Juan','juanpabloint@gmail.com ','123')
     
+drop Table `CouponHistories`
 
+DROP TABLE MarketplaceUser
 
+DROP TABLE MarketplaceUsers
 
+DROP TABLE `MarketplaceUser`
+
+DROP TABLE PurchaseCoupon
 
 -- Tabla CouponHistory
-CREATE TABLE CouponHistory (
+CREATE TABLE CouponHistories (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    couponId INT,
-    change_date DATE,
-    field_changed VARCHAR(45),
-    old_value VARCHAR(45),
-    new_value VARCHAR(45),
+    CouponId INT,
+    ChangeDate DATE,
+    FieldChanged VARCHAR(45),
+    OldValue VARCHAR(45),
+    NewValue VARCHAR(45),
     changed_by_user INT,
     FOREIGN KEY (couponId) REFERENCES Coupons(id)
 );
@@ -69,7 +75,7 @@ ALTER TABLE CouponHistories
 CHANGE COLUMN OldValue OldValue VARCHAR(55);
 
 ALTER TABLE CouponHistories
-ADD COLUMN changed_by_user INT;
+ADD COLUMN ChangedByUser INT;
 
 
 -- Tabla UserRole

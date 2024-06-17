@@ -8,6 +8,8 @@ namespace Backengv2.Dtos
     public class CouponsDto
     {
 
+
+         public int id { get; set; }
           public string? Name { get; set; }
           public string? Description { get; set; }
           public DateTime CreationDate { get; set; }
@@ -22,6 +24,7 @@ namespace Backengv2.Dtos
           public string? status { get; set; }
           public int RedemptionLimit { get; set; }
           public int CurrentRedemptions { get; set; }
+          public string? MarketingUsername { get; set; }
           public int MarketingUserId { get; set; } 
     }
 }

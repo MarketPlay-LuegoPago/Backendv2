@@ -26,7 +26,7 @@ public class CouponUpdateController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCoupon(int id, [FromBody] CouponsDto couponsDto)
+    public async Task<IActionResult> UpdateCoupon(int id, [FromBody] CuponUpdateDto cuponUpdateDto)
     {
       var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim == null)
@@ -53,7 +53,7 @@ public class CouponUpdateController : ControllerBase
         }
 
         // Mapea los datos del objeto CouponDto al objeto Coupon
-        var couponEntity = _mapper.Map<Coupon>(couponsDto);
+        var couponEntity = _mapper.Map<Coupon>(cuponUpdateDto);
         couponEntity.id = id; // Asegurar que el ID del cupón no cambie
 
         try

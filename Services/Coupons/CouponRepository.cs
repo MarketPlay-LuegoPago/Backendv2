@@ -1,5 +1,5 @@
-// File: Data/CouponRepository.cs
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backengv2.Data;
@@ -23,6 +23,7 @@ namespace Backengv2.Services.Coupons
     
     }
 
+
     public async Task<IEnumerable<Coupon>> GetAllCouponsAsync()
     {
         return await _context.Coupons.Include(c => c.MarketingUser).ToListAsync();
@@ -43,13 +44,8 @@ namespace Backengv2.Services.Coupons
         }
 
         return await query.ToListAsync();
-    }
 
-    public async Task<IEnumerable<Coupon>> GetCouponsByCreatorNameAsync(string creatorName)
-    {
-        return await _context.Coupons.Include(c => c.MarketingUser)
-                                     .Where(c => c.MarketingUser.Username == creatorName)
-                                     .ToListAsync();
+        
     }
 
     public async Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime activationDate)
@@ -58,6 +54,53 @@ namespace Backengv2.Services.Coupons
                                      .Where(c => c.ActivationDate == activationDate.Date)
                                      .ToListAsync();
     }
+
+
+      public async Task AddCouponAsync(Coupon coupon)
+      {
+          using (var transaction = await _context.Database.BeginTransactionAsync())
+          {
+              try
+              {
+                  await _context.Coupons.AddAsync(coupon);
+                  await _context.SaveChangesAsync();
+
+                  // Agregar entrada en CouponHistory
+                  var couponHistory = new CouponHistory
+                  {
+                      CouponId = coupon.id,
+                      ChangeDate = DateTime.UtcNow,
+                      FieldChanged = "Created",
+                      OldValue = coupon.DiscountValue.ToString(),
+                      NewValue = "Coupon Created",
+                      ChangedByUser = coupon.MarketingUserId
+                  };
+
+                  await _context.CouponHistories.AddAsync(couponHistory);
+                  await _context.SaveChangesAsync();
+
+                  await transaction.CommitAsync();
+              }
+              catch (Exception)
+              {
+                  await transaction.RollbackAsync();
+                  throw;
+              }
+          }
+          
+    
+    }
+
+
+
+    public async Task<IEnumerable<Coupon>> GetCouponsByCreatorNameAsync(string creatorName)
+    {
+        return await _context.Coupons.Include(c => c.MarketingUser)
+                                     .Where(c => c.MarketingUser.Username == creatorName)
+                                     .ToListAsync();
+    }
+
+
 
     public async Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime expirationDate)
     {
@@ -73,78 +116,70 @@ namespace Backengv2.Services.Coupons
                                      .ToListAsync();
     }
 
-    public async Task AddCouponAsync(Coupon coupon)
-    {
-        await _context.Coupons.AddAsync(coupon);
-        await _context.SaveChangesAsync();
-    }
+
 
     public async Task<Coupon> GetByIdAsync(int id)
     {
         return await _context.Coupons.SingleOrDefaultAsync(c => c.id == id);
     }
-    public async Task UpdateCouponAsync(Coupon couponEntity)
+
+     public async Task UpdateCouponAsync(Coupon couponEntity)
+    {
+        var existingCoupon = await GetByIdAsync(couponEntity.id);
+
+        if (existingCoupon == null)
         {
-            var existingCoupon = await GetByIdAsync(couponEntity.id);
+            throw new KeyNotFoundException("Cupón no encontrado.");
+        }
 
-            if (existingCoupon == null)
-            {
-                throw new KeyNotFoundException("Cupón no encontrado.");
-            }
+        if (existingCoupon.status == "redimido")
+        {
+            throw new InvalidOperationException("El cupón no se puede editar porque ya ha sido utilizado.");
+        }
 
-            if (existingCoupon.status == "redimido")
-            {
-                throw new InvalidOperationException("El cupón no se puede editar porque ya ha sido utilizado.");
-            }
-
-            //var changes = GetChanges(existingCoupon, couponEntity);
-            //await SaveChangesHistory(couponEntity.id, changes);
-
-            var changes = GetChanges(existingCoupon, couponEntity);
-            await SaveChangesHistory(couponEntity.id, changes, couponEntity.MarketingUserId);
+        var changes = GetChanges(existingCoupon, couponEntity);
+        await SaveChangesHistory(couponEntity.id, changes, couponEntity.MarketingUserId);
 
         _context.Entry(existingCoupon).CurrentValues.SetValues(couponEntity);
         await _context.SaveChangesAsync();
+    }
+        private Dictionary<string, (string, string)> GetChanges(Coupon existingCoupon, Coupon updatedCoupon)
+        {
+            var changes = new Dictionary<string, (string, string)>();
 
-            _context.Entry(existingCoupon).CurrentValues.SetValues(couponEntity);
-            await _context.SaveChangesAsync();
+            foreach (var prop in typeof(Coupon).GetProperties())
+            {
+                var existingValue = prop.GetValue(existingCoupon);
+                var updatedValue = prop.GetValue(updatedCoupon);
+
+                if (!EqualityComparer<object>.Default.Equals(existingValue, updatedValue))
+                {
+                    changes.Add(prop.Name, (existingValue?.ToString(), updatedValue?.ToString()));
+                }
+            }
+
+            return changes;
         }
 
-            private Dictionary<string, (string, string)> GetChanges(Coupon existingCoupon, Coupon updatedCoupon)
+    private async Task SaveChangesHistory(int couponId, Dictionary<string, (string, string)> changes, int userId)
+    {
+        foreach (var change in changes)
+        {
+            await _context.CouponHistories.AddAsync(new CouponHistory
             {
-                var changes = new Dictionary<string, (string, string)>();
+                CouponId = couponId,
+                ChangeDate = DateTime.UtcNow,
+                FieldChanged = change.Key,
+                OldValue = change.Value.Item1,
+                NewValue = change.Value.Item2,
+                ChangedByUser = userId
+            });
+        }
+        await _context.SaveChangesAsync();
+    }
 
-                foreach (var prop in typeof(Coupon).GetProperties())
-                {
-                    var existingValue = prop.GetValue(existingCoupon);
-                    var updatedValue = prop.GetValue(updatedCoupon);
+    // Otros métodos y lógica del repositorio...
 
-                    if (!EqualityComparer<object>.Default.Equals(existingValue, updatedValue))
-                    {
-                        changes.Add(prop.Name, (existingValue?.ToString(), updatedValue?.ToString()));
-                    }
-                }
-
-                return changes;
-            }
-
-
-           private async Task SaveChangesHistory(int couponId, Dictionary<string, (string, string)> changes, int userId)
-            {
-                foreach (var change in changes)
-                {
-                    await _context.CouponHistories.AddAsync(new CouponHistory
-                    {
-                        CouponId = couponId,
-                        ChangeDate = DateTime.UtcNow,
-                        FieldChanged = change.Key,
-                        OldValue = change.Value.Item1,
-                        NewValue = change.Value.Item2,
-                        changed_by_user = userId
-                    });
-                }
-                await _context.SaveChangesAsync(); // Guarda los cambios al final del proceso.
-            }
 
 
 
@@ -206,8 +241,8 @@ namespace Backengv2.Services.Coupons
 
 
 
-
+}
 
 }
-}
+
 

@@ -8,7 +8,7 @@ namespace Backengv2.Models
 {
     public class Coupon
     {
-        [Key]
+    [Key]
         public int id { get; set; }
           public string? Name { get; set; }
           public string? Description { get; set; }
@@ -26,5 +26,6 @@ namespace Backengv2.Models
           public int CurrentRedemptions { get; set; }
           public int MarketingUserId { get; set; } 
         public MarketingUser? MarketingUser { get; set; }
+        public ICollection<CouponHistory> CouponHistories { get; set; } = new List<CouponHistory>();
     }
 }
