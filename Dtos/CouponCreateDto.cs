@@ -1,30 +1,55 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace Backengv2.Models
+namespace Backengv2.Dtos
 {
-    public class Coupons
+    public class CouponCreateDto
     {
-        [Key]
-        public int Coupon_id { get; set; }
+        [Required]
         public string? Name { get; set; }
+
         public string? Description { get; set; }
+
+        [Required]
         public DateTime CreationDate { get; set; }
-        public DateTime? ActivationDate { get; set; }
-        public DateTime? Expiration_date { get; set; }
+
+        [Required]
+        public DateTime ActivationDate { get; set; }
+
+        [Required]
+        public DateTime expiration_date { get; set; }
+
+        [Required]
         public string? DiscountType { get; set; }
+
+        [Required]
         public decimal DiscountValue { get; set; }
+
+        [Required]
         public string? UseType { get; set; }
-        public int Quantity_uses { get; set; }
+
+        [Required]
+        public int QuantityUses { get; set; }
+
+        [Required]
         public decimal MinPurchaseAmount { get; set; }
+
+        [Required]
         public decimal MaxPurchaseAmount { get; set; }
-        public string? Status { get; set; }
+
+        [Required]
+        public string? status { get; set; }
+
+        [Required]
         public int RedemptionLimit { get; set; }
+        
+        [Required]
         public int CurrentRedemptions { get; set; }
+
+        [Required]
         public int MarketingUserId { get; set; }
-        public MarketingUser? MarketingUser { get; set; }
     }
 }
