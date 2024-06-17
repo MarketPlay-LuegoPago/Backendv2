@@ -1,4 +1,3 @@
-//using Backeng.Data;
 using Backengv2.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
@@ -39,5 +38,13 @@ namespace Backend.Services
             return tokenHandler.WriteToken(token);
         }
 
+        public string GenerateToken(MarketingUsers user)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class MarketingUsers
+    {
     }
 }

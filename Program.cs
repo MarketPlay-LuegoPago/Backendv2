@@ -65,6 +65,13 @@ app.UseAuthorization();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
+new AuthRepository(provider.GetRequiredService<BaseContext>(), "FTGUNMIMGI4MFI4J2RÑNUFRFFM4FN4874H4BBFHRF"));
+        
+//builder.Services.AddAutoMapper(typeof(StudentP rofile), typeof(Teacher Profile), typeof(ClassProfile));
+
+var app = builder.Build();
+app.UseAuthentication();  //Agregamos permisos para DataConection
+app.UseAuthorization();
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
