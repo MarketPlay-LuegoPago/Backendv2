@@ -22,6 +22,7 @@ namespace Backengv2.Services.Coupons
         Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime ActivationDate);
         Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime ExpirationDate);
         Task<IEnumerable<Coupon>> GetCouponsActiveAsync();
+        Task <IEnumerable<Coupon>> GetCouponsByJwtAsync(int id);   //Agregamos el listar por jwt
 
         Task AddCouponAsync(Coupon coupon);
     }

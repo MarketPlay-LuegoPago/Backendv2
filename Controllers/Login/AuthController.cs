@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Backengv2.Data;
-using Backengv2.Models;
 using Microsoft.EntityFrameworkCore;
 using backend.Dto;
 using Backend.Services;
@@ -30,5 +29,3 @@ namespace Authcontroller
          }
     } 
 }
-
-

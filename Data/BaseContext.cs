@@ -1,6 +1,5 @@
 using Backengv2.Models;
 using Microsoft.EntityFrameworkCore;
-using Backengv2.Models;
 
 namespace Backengv2.Data
 {

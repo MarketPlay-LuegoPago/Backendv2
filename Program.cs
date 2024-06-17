@@ -35,8 +35,9 @@ builder.Services.AddAuthentication(opt => {
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer  = "http://localhost:5090", //Here the endpoint
-            ValidAudience =  "http://localhost:5090", //Here the other endpoint 
+            //LLamamos la variable de enterno que nos guarda los endpoints
+            ValidIssuer  = @Environment.GetEnvironmentVariable("jwtUrl"), //Here the endpoint
+            ValidAudience =  @Environment.GetEnvironmentVariable("jwtUrl"), //Here the other endpoint 
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("FTGUNMIMGI4MFI4J2RÑNUFRFFM4FN4874H4BBFHRF"))
         };
     });
@@ -63,13 +64,12 @@ var app = builder.Build();
 app.UseAuthentication();  // Agregamos permisos para DataConnection
 app.UseAuthorization();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+//app.UseMiddleware<ErrorHandlingMiddleware>();
 
-new AuthRepository(provider.GetRequiredService<BaseContext>(), "FTGUNMIMGI4MFI4J2RÑNUFRFFM4FN4874H4BBFHRF"));
+//new AuthRepository(provider.GetRequiredService<BaseContext>(), "FTGUNMIMGI4MFI4J2RÑNUFRFFM4FN4874H4BBFHRF"));
         
 //builder.Services.AddAutoMapper(typeof(StudentP rofile), typeof(Teacher Profile), typeof(ClassProfile));
 
-var app = builder.Build();
 app.UseAuthentication();  //Agregamos permisos para DataConection
 app.UseAuthorization();
 app.MapControllers();

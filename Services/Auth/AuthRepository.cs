@@ -25,26 +25,24 @@ namespace Backend.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSecret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Username)
-                }),
-                Expires = DateTime.UtcNow.AddDays(2),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenOptions = new JwtSecurityToken(
+                issuer : @Environment.GetEnvironmentVariable("jwtUrl"),
+                audience : @Environment.GetEnvironmentVariable("jwtUrl"),
+                claims : new List<Claim>(),
+                expires : DateTime.Now.AddHours(1), 
+                signingCredentials : new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            );
+            // var token = new tokenHandler()(tokenOptions);
+            return tokenHandler.WriteToken(tokenOptions);
         }
 
-        public string GenerateToken(MarketingUsers user)
-        {
-            throw new NotImplementedException();
-        }
+        // object IAuthRepository.GenerateToken(MarketingUser user)
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 
-    public class MarketingUsers
+    public class MarketingUsers   //Clases para Generar Tokens
     {
     }
 }
