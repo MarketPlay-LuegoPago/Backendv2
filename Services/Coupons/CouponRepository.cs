@@ -260,11 +260,12 @@ namespace Backengv2.Services.Coupons
     }
 
 
-
-
-
-
-}
+        //Clase para mostrar Cupones por
+        public Task<IEnumerable<Coupon>> GetCouponsByJwtAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 }
 

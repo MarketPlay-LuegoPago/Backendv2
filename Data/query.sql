@@ -1,3 +1,4 @@
+use bjhodx0hwf028sg5szmr;
 
 -- Tabla MarketplaceUser
 CREATE TABLE MarketplaceUser (
@@ -6,16 +7,26 @@ CREATE TABLE MarketplaceUser (
     email VARCHAR(85),
     password VARCHAR(55)
 );
+<<<<<<< HEAD
+select * from MarketplaceUser;
+=======
 drop table MarketingUser
 
+>>>>>>> 8897019b7930b8e922adcd7388608d7f50c8954f
 
 -- Tabla MarketingUser
+--Tabla empleados
 CREATE TABLE MarketingUser (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(45),
     email VARCHAR(45),
     password VARCHAR(55)
 );
+INSERT INTO MarketingUser VALUES (1, "Mateo", "mateo@gmail.com","123");
+SELECT * FROM MarketingUser;
+
+
+
 
 -- Tabla Coupons
 CREATE TABLE Coupons (

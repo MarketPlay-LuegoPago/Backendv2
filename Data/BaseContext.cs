@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Backengv2.Models;
-using Backengv2.Dtos;
-
+using Microsoft.EntityFrameworkCore;
 namespace Backengv2.Data
 {
     public class BaseContext : DbContext
@@ -58,6 +52,7 @@ namespace Backengv2.Data
             .WithMany()
             .HasForeignKey(ch => ch.ChangedByUser);
         }
+       // public DbSet <MarketingUser> MarketingUser {get; set; }
     }
 
     
