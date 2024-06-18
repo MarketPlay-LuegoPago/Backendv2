@@ -29,10 +29,10 @@ namespace Backengv2.Controllers.Login
           _context = context;
             }
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] MarketingUser employee)
+        public async Task<IActionResult> Login([FromBody] Autorize token)
         {
             var MarketingUser = await _context.MarketingUsers
-                .FirstOrDefaultAsync(e => e.Email == employee.Email && e.Password == employee.Password);
+                .FirstOrDefaultAsync(e => e.Email == token.Email && e.Password == token.Password);
             
             if (MarketingUser == null)
             {

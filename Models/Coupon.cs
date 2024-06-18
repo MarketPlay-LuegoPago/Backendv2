@@ -24,7 +24,7 @@ namespace Backengv2.Models
           public string? status { get; set; }
           public int RedemptionLimit { get; set; }
           public int CurrentRedemptions { get; set; }
-          public int MarketingUserId { get; set; } 
+          public int MarketingUserid { get; set; } 
         public MarketingUser? MarketingUser { get; set; }
         public ICollection<CouponHistory> CouponHistories { get; set; } = new List<CouponHistory>();
     }

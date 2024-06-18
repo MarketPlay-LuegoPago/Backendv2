@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Backengv2.Models;
-
+using Microsoft.EntityFrameworkCore;
 namespace Backengv2.Data
 {
     public class BaseContext : DbContext
@@ -27,11 +22,25 @@ namespace Backengv2.Data
         {
             base.OnModelCreating(modelBuilder);
 
+             // Definir la relación entre Coupon y CouponHistory
             modelBuilder.Entity<Coupon>()
                 .HasMany(c => c.CouponHistories)
                 .WithOne(ch => ch.Coupon)
                 .HasForeignKey(ch => ch.CouponId);
-        }
+
+            // Definir la relación entre Coupon y MarketingUser
+            modelBuilder.Entity<Coupon>()
+                .HasOne(c => c.MarketingUser)
+                .WithMany()
+                .HasForeignKey(c => c.MarketingUserid);
+
+           // Configurar la relación entre CouponHistory y MarketingUser
+            modelBuilder.Entity<CouponHistory>()
+                .HasOne(ch => ch.MarketingUser)
+                .WithMany()
+                .HasForeignKey(ch => ch.ChangedByUser);
+                }
+              // public DbSet <MarketingUser> MarketingUser {get; set; }
     }
 
     

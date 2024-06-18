@@ -50,6 +50,6 @@ namespace Backengv2.Dtos
         public int CurrentRedemptions { get; set; }
 
         [Required]
-        public int MarketingUserId { get; set; }
+        public int MarketingUserid { get; set; }
     }
 }

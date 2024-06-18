@@ -22,8 +22,14 @@ namespace Backengv2.Services.Coupons
         Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime ActivationDate);
         Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime ExpirationDate);
         Task<IEnumerable<Coupon>> GetCouponsActiveAsync();
+       
 
         Task AddCouponAsync(Coupon coupon);
+
+        Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync();
+       
+        Task<IEnumerable<CouponsDto>> GetCouponsForUserAsync(int userId, bool isAdmin);
+  
 
         Task<Coupon> GetById(int id);
         Task DeleteCouponAsync(Coupon coupon);

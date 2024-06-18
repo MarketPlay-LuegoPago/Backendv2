@@ -9,7 +9,7 @@ namespace Backengv2.Dtos
     {
 
 
-         public int id { get; set; }
+         public int Id { get; set; }
           public string? Name { get; set; }
           public string? Description { get; set; }
           public DateTime CreationDate { get; set; }
@@ -25,6 +25,6 @@ namespace Backengv2.Dtos
           public int RedemptionLimit { get; set; }
           public int CurrentRedemptions { get; set; }
           public string? MarketingUsername { get; set; }
-          public int MarketingUserId { get; set; } 
+          public int MarketingUserid { get; set; } 
     }
 }

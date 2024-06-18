@@ -1,18 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Backengv2.Models;
 
 namespace Backengv2.Dtos
 {
     public class CouponHistoryDto
     {
-         public int id { get; set; }
+        public int Id { get; set; }
         public int CouponId { get; set; }
-        public DateTime change_date { get; set; }
-        public string? FieldChanged { get; set; }
-        public string ?OldValue { get; set; }
-        public string? NewValue { get; set; }
-         public int ChangedByUser { get; set; }
+        public DateTime ChangeDate { get; set; }
+        public string FieldChanged { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
+        public int ChangedByUser { get; set; }
+        //public Coupon? coupon { get; set; }
+      public string CouponName { get; set; }
+      public string MarketingUsername { get; set; }
     }
 }

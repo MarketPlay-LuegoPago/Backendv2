@@ -46,7 +46,7 @@ namespace Backengv2.Controllers.Coupons
                 return NotFound("Cupón no encontrado.");
             }
 
-             if (coupon.MarketingUserId != userId)
+             if (coupon.MarketingUserid != userId)
             {
                 return Forbid("No tienes permiso para eliminar este cupón.");
             }

@@ -45,7 +45,7 @@ namespace Backengv2.Controllers.Coupons
             }
 
             // Verifica si el usuario autenticado es el dueño del cupón o tiene los permisos necesarios
-            if (coupon.MarketingUserId != userId)
+            if (coupon.MarketingUserid != userId)
             {
                 return Forbid("No tienes permiso para cambiar el estado de este cupón.");
             }
