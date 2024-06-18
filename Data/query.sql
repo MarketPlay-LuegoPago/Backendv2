@@ -112,6 +112,9 @@ CREATE TABLE Purchase (
 );
 
 INSERT INTO `Purchase` (user_id, date, amount) VALUES (1, '2024-06-18', 18.00);
+INSERT INTO `Purchase` (user_id, date, amount) VALUES (3, '2024-06-18', 18.00);
+
+INSERT INTO `Purchase` (user_id, date, amount) VALUES (4, '2024-06-18', 18.00);
 
 
 

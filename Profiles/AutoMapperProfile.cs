@@ -14,7 +14,24 @@ namespace Backengv2.Profiles
        .ForMember(dest => dest.quantity_uses, opt => opt.MapFrom(src => src.quantity_uses))
       .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
-      CreateMap<Coupon, CuponUpdateDto>();
+       CreateMap<CuponUpdateDto, Coupon>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+     .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.CreationDate))
+     .ForMember(dest => dest.ActivationDate, opt => opt.MapFrom(src => src.ActivationDate))
+     .ForMember(dest => dest.expiration_date, opt => opt.MapFrom(src => src.expiration_date))
+     .ForMember(dest => dest.DiscountType, opt => opt.MapFrom(src => src.DiscountType))
+     .ForMember(dest => dest.DiscountValue, opt => opt.MapFrom(src => src.DiscountValue))
+     .ForMember(dest => dest.UseType, opt => opt.MapFrom(src => src.UseType))
+     .ForMember(dest => dest.quantity_uses, opt => opt.MapFrom(src => src.quantity_uses))
+     .ForMember(dest => dest.MinPurchaseAmount, opt => opt.MapFrom(src => src.MinPurchaseAmount))
+     .ForMember(dest => dest.MaxPurchaseAmount, opt => opt.MapFrom(src => src.MaxPurchaseAmount))
+     .ForMember(dest => dest.status, opt => opt.MapFrom(src => src.status))
+     .ForMember(dest => dest.RedemptionLimit, opt => opt.MapFrom(src => src.RedemptionLimit))
+     .ForMember(dest => dest.MarketingUserid, opt => opt.MapFrom(src => src.MarketingUserid));
+
+
+
       // Mapeo para CouponDetailDto
       CreateMap<Coupon, CouponDetailDto>()
           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -34,7 +51,7 @@ namespace Backengv2.Profiles
      .ForMember(dest => dest.DiscountType, opt => opt.MapFrom(src => src.DiscountType))
      .ForMember(dest => dest.DiscountValue, opt => opt.MapFrom(src => src.DiscountValue))
      .ForMember(dest => dest.UseType, opt => opt.MapFrom(src => src.UseType))
-     .ForMember(dest => dest.quantity_uses, opt => opt.MapFrom(src => src.QuantityUses))
+     .ForMember(dest => dest.quantity_uses, opt => opt.MapFrom(src => src.quantity_uses))
      .ForMember(dest => dest.MinPurchaseAmount, opt => opt.MapFrom(src => src.MinPurchaseAmount))
      .ForMember(dest => dest.MaxPurchaseAmount, opt => opt.MapFrom(src => src.MaxPurchaseAmount))
      .ForMember(dest => dest.status, opt => opt.MapFrom(src => src.status))

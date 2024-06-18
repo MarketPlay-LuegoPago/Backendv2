@@ -238,15 +238,22 @@ namespace Backengv2.Services.Coupons
 
         foreach (var user in marketplaceUsers)
         {
-            var emailContent = $"<p>Nombre del cupón: {coupon.Name}</p>" +
-                               $"<p>Descripción: {coupon.Description}</p>" +
-                               $"<p>Fecha de vigencia: {coupon.expiration_date}</p>" +
-                               $"<p>Valor del descuento: {coupon.DiscountValue}</p>" +
-                               (message != null ? $"<p>{message}</p>" : string.Empty);
+            var emailContent = $"<p>¡Hola {user.Username}!</p>" +
+                       $"<p>Nos complace informarte que tienes un cupón especial esperando por ti.</p>" +
+                       $"<p>Detalles del cupón:</p>" +
+                       $"<ul>" +
+                       $"<li><strong>Nombre del cupón:</strong> {coupon.Name}</li>" +
+                       $"<li><strong>Descripción:</strong> {coupon.Description}</li>" +
+                       $"<li><strong>Fecha de vigencia:</strong> {coupon.expiration_date.ToString("dd/MM/yyyy")}</li>" +
+                       $"<li><strong>Valor del descuento:</strong> {coupon.DiscountValue:C}</li>" +
+                       $"</ul>" +
+                       $"<p>¡Usa tu cupón ahora y aprovecha el descuento en tu próxima compra!</p>" +
+                       $"<p>Recuerda que el cupón es válido hasta el {coupon.expiration_date.ToString("dd/MM/yyyy")}.</p>" +
+                       $"<p>¡Esperamos que disfrutes de tu ahorro y que tengas una excelente experiencia con nosotros!</p>";
 
             try
             {
-                await _mailerSendService.SendEmailAsync("MS_zrwFkg@trial-ynrw7gynq8r42k8e.mlsender.net", "Sistecredito", new List<string> { user.Email }, new List<string> { user.Username }, "Cupón Enviado", "", emailContent);
+                await _mailerSendService.SendEmailAsync("MS_zrwFkg@trial-ynrw7gynq8r42k8e.mlsender.net", "luegopago", new List<string> { user.Email }, new List<string> { user.Username },  $"{user.Username} <img src='https://path_to_your_icon/icon.png' alt='Cupón' width='20'> ¡No te lo pierdas!", "", emailContent);
             }
             catch
             {
@@ -316,16 +323,55 @@ public async Task statuschangeCouponAsync(Coupon coupon)
                     .AnyAsync(u => u.userId == userId && u.CouponId == couponId);
             }
 
-            public async Task AddCouponUsageAsync(CouponUsage usage)
-            {
-                await _context.CouponUsages.AddAsync(usage);
-                await _context.SaveChangesAsync();
-            }
+    public async Task AddCouponUsageAsync(CouponUsage usage)
+        {
+            await _context.CouponUsages.AddAsync(usage);
+            await _context.SaveChangesAsync();
+            var user = await _context.MarketplaceUser.FindAsync(usage.userId);
 
-    public async Task<Coupon> GetCouponByIdAsync(int couponId)
-    {
-        return await _context.Coupons.FindAsync(couponId);
-    }
+            var coupon = await _context.Coupons.FindAsync(usage.CouponId);
+        if (user != null && coupon != null)
+        {
+            var subject = "Cupón Redimido con Éxito - Detalles de Tu Descuento";
+            var textContent = $"Hola {user.Username},\n\n";
+
+            var htmlContent = $"<p>Hola <strong>{user.Username}</strong>,</p>" +
+                $"<p>Nos complace informarte que has redimido exitosamente tu cupón con el código <strong>{coupon.Name}</strong>.</p>" +
+                $"<p><strong>Detalles de la Redención:</strong></p>" +
+                $"<ul>" +
+                $"<li><strong>Cupón:</strong> {coupon.Name}</li>" +
+                $"<li><strong>Descripción:</strong> {coupon.Description}</li>" +
+                $"<li><strong>Fecha de Redención:</strong> {DateTime.UtcNow}</li>" +
+                $"<li><strong>Monto de la Compra:</strong> {usage.transaction_amount}</li>" +
+                $"<li><strong>Descuento Aplicado:</strong> {coupon.DiscountValue}</li>" +
+                $"</ul>" +
+                $"<p>Tu descuento ha sido aplicado a tu compra con el ID <strong>{usage.PurchaseId}</strong>. Gracias por utilizar nuestro servicio.</p>" +
+                $"<p>Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.</p>" +
+                $"<p>Saludos cordiales,</p>" +
+                $"<p>Luego Pago<br>" +
+                $"<a href='mailto:[Correo Electrónico de Soporte]'>Luegopago.soporte@luegopago.com</a><br>" +
+                $"Teléfono de Soporte</p>"+
+                 $"<p>" +
+            $"<img src='https://luegopago.blob.core.windows.net/luegopago-uploads/website/luegopago-logo.png' alt='Tu Empresa' width='200'>" +
+            $"</p>";
+
+            await _mailerSendService.SendEmailAsync(
+                from: "MS_vmEavq@trial-ynrw7gynq8r42k8e.mlsender.net",
+                fromName: "Sistecredito",
+                to: new List<string> { user.Email },
+                toNames: new List<string> { user.Username },
+                subject: subject,
+                text: textContent,
+                html: htmlContent
+            );
+        
+  }  }
+
+
+        public async Task<Coupon> GetCouponByIdAsync(int couponId)
+        {
+            return await _context.Coupons.FindAsync(couponId);
+        }
 
 
 
