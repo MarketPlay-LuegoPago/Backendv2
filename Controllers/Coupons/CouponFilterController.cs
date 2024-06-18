@@ -5,6 +5,7 @@ using AutoMapper;
 using Backengv2.Dtos;
 using Backengv2.Services.Coupons;
 using System;
+using System.Security.Claims;
 
 namespace Backengv2.Controllers
 {
@@ -64,12 +65,25 @@ namespace Backengv2.Controllers
             return Ok(couponsDto);
         }
 
-    [HttpGet("couponHistories")]
-    public async Task<ActionResult<IEnumerable<CouponHistoryDto>>> GetCouponHistories()
-    {
-        var couponHistories = await _couponRepository.GetAllCouponHistoriesAsync();
-        return Ok(couponHistories);
-    }
+        [HttpGet("couponHistories")]
+        public async Task<ActionResult<IEnumerable<CouponHistoryDto>>> GetCouponHistories()
+        {
+            var couponHistories = await _couponRepository.GetAllCouponHistoriesAsync();
+            return Ok(couponHistories);
+        }
+              [HttpGet("forUser")]
+              
+      [HttpGet("forUser/{userId}")]
+      public async Task<ActionResult<IEnumerable<CouponsDto>>> GetCouponsForUser(int userId, bool isAdmin)
+      {
+          var coupons = await _couponRepository.GetCouponsForUserAsync(userId, isAdmin);
+          if (coupons == null || !coupons.Any())
+          {
+              return NotFound("No se encontraron cupones.");
+          }
+
+          return Ok(coupons);
+      }
 
 
 

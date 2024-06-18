@@ -26,6 +26,8 @@ namespace Backengv2.Services.Coupons
 
         Task AddCouponAsync(Coupon coupon);
 
-        Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync(); 
-    }
+        Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync();
+       
+        Task<IEnumerable<CouponsDto>> GetCouponsForUserAsync(int userId, bool isAdmin);
+  }
 }

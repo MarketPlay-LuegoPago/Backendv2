@@ -1,4 +1,5 @@
 using System;
+using Backengv2.Models;
 
 namespace Backengv2.Dtos
 {
@@ -11,7 +12,7 @@ namespace Backengv2.Dtos
         public string OldValue { get; set; }
         public string NewValue { get; set; }
         public int ChangedByUser { get; set; }
-
+        //public Coupon? coupon { get; set; }
       public string CouponName { get; set; }
       public string MarketingUsername { get; set; }
     }
