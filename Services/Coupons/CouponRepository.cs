@@ -60,44 +60,45 @@ namespace Backengv2.Services.Coupons
     }
 
 
-     public async Task AddCouponAsync(Coupon coupon)
+   public async Task AddCouponAsync(Coupon coupon)
 {
     using (var transaction = await _context.Database.BeginTransactionAsync())
     {
-        try
+        await _context.Coupons.AddAsync(coupon);
+        await _context.SaveChangesAsync();
+
+        var couponHistory = new CouponHistory
         {
-            // Agregar el cupón a la base de datos
-            await _context.Coupons.AddAsync(coupon);
-            await _context.SaveChangesAsync();
+            CouponId = coupon.id,
+            ChangeDate = DateTime.UtcNow,
+            FieldChanged = "Created",
+            OldValue = coupon.DiscountValue.ToString(),
+            NewValue = "Coupon Created",
+            ChangedByUser = coupon.MarketingUserid
+        };
 
-            // Agregar entrada en CouponHistory
-            var couponHistory = new CouponHistory
-            {
-                CouponId = coupon.id,
-                ChangeDate = coupon.CreationDate,
-                FieldChanged = "Created",
-                OldValue = coupon.DiscountValue.ToString(),
-                NewValue = "Coupon Created",
-                ChangedByUser = coupon.MarketingUserid
-            };
+        await _context.CouponHistories.AddAsync(couponHistory);
+        await _context.SaveChangesAsync();
 
-            await _context.CouponHistories.AddAsync(couponHistory);
-            await _context.SaveChangesAsync();
-
-            // Confirmar la transacción
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            // Revertir la transacción en caso de error
-            await transaction.RollbackAsync();
-            // Loguear el error para obtener más detalles
-            Console.WriteLine("Error al agregar el cupón: " + ex.Message);
-            throw;
-        }
+        await transaction.CommitAsync();
     }
 }
 
+
+
+
+    public async Task<IEnumerable<CouponsDto>> GetCouponsForUserAsync(int userId, bool isAdmin)
+      {
+          IQueryable<Coupon> query = _context.Coupons.Include(c => c.MarketingUser);
+
+          if (!isAdmin)
+          {
+              query = query.Where(c => c.MarketingUserid == userId);
+          }
+
+          var coupons = await query.ToListAsync();
+          return _mapper.Map<IEnumerable<CouponsDto>>(coupons);
+      }
 
 
 
@@ -134,9 +135,6 @@ namespace Backengv2.Services.Coupons
         var couponHistoriesDto = _mapper.Map<IEnumerable<CouponHistoryDto>>(couponHistories);
         return couponHistoriesDto;
     }
-
-
-
 
 
 
