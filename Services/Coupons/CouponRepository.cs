@@ -6,6 +6,8 @@ using Backengv2.Data;
 using Backengv2.Models;
 using Microsoft.EntityFrameworkCore;
 using Backengv2.Services;
+using Backengv2.Dtos;
+using AutoMapper;
 
 namespace Backengv2.Services.Coupons
 {
@@ -14,12 +16,14 @@ namespace Backengv2.Services.Coupons
     private readonly BaseContext _context;
     private readonly IMarketplaceUserRepository  _marketplaceUserRepository;
     private readonly MailerSendService _mailerSendService;
+    private readonly IMapper _mapper;
 
-    public CouponRepository(BaseContext context,MailerSendService mailerSendService,IMarketplaceUserRepository marketplaceUserRepository)
+    public CouponRepository(IMapper mapper, BaseContext context,MailerSendService mailerSendService,IMarketplaceUserRepository marketplaceUserRepository)
     {
         _context = context;
         _mailerSendService = mailerSendService;
         _marketplaceUserRepository = marketplaceUserRepository;
+        _mapper = mapper;
     
     }
 
@@ -56,44 +60,45 @@ namespace Backengv2.Services.Coupons
     }
 
 
-     public async Task AddCouponAsync(Coupon coupon)
+   public async Task AddCouponAsync(Coupon coupon)
 {
     using (var transaction = await _context.Database.BeginTransactionAsync())
     {
-        try
+        await _context.Coupons.AddAsync(coupon);
+        await _context.SaveChangesAsync();
+
+        var couponHistory = new CouponHistory
         {
-            // Agregar el cupón a la base de datos
-            await _context.Coupons.AddAsync(coupon);
-            await _context.SaveChangesAsync();
+            CouponId = coupon.id,
+            ChangeDate = DateTime.UtcNow,
+            FieldChanged = "Created",
+            OldValue = coupon.DiscountValue.ToString(),
+            NewValue = "Coupon Created",
+            ChangedByUser = coupon.MarketingUserid
+        };
 
-            // Agregar entrada en CouponHistory
-            var couponHistory = new CouponHistory
-            {
-                CouponId = coupon.id,
-                ChangeDate = DateTime.UtcNow,
-                FieldChanged = "Created",
-                OldValue = coupon.DiscountValue.ToString(),
-                NewValue = "Coupon Created",
-                ChangedByUser = coupon.MarketingUserId
-            };
+        await _context.CouponHistories.AddAsync(couponHistory);
+        await _context.SaveChangesAsync();
 
-            await _context.CouponHistories.AddAsync(couponHistory);
-            await _context.SaveChangesAsync();
-
-            // Confirmar la transacción
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            // Revertir la transacción en caso de error
-            await transaction.RollbackAsync();
-            // Loguear el error para obtener más detalles
-            Console.WriteLine("Error al agregar el cupón: " + ex.Message);
-            throw;
-        }
+        await transaction.CommitAsync();
     }
 }
 
+
+
+
+    public async Task<IEnumerable<CouponsDto>> GetCouponsForUserAsync(int userId, bool isAdmin)
+      {
+          IQueryable<Coupon> query = _context.Coupons.Include(c => c.MarketingUser);
+
+          if (!isAdmin)
+          {
+              query = query.Where(c => c.MarketingUserid == userId);
+          }
+
+          var coupons = await query.ToListAsync();
+          return _mapper.Map<IEnumerable<CouponsDto>>(coupons);
+      }
 
 
 
@@ -120,6 +125,18 @@ namespace Backengv2.Services.Coupons
                                      .ToListAsync();
     }
 
+    public async Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync()
+    {
+        var couponHistories = await _context.CouponHistories
+            .Include(ch => ch.Coupon)
+            .Include(ch => ch.MarketingUser)
+            .ToListAsync();
+
+        var couponHistoriesDto = _mapper.Map<IEnumerable<CouponHistoryDto>>(couponHistories);
+        return couponHistoriesDto;
+    }
+
+
 
 
    public async Task<Coupon> GetByIdAsync(int id)
@@ -142,7 +159,7 @@ namespace Backengv2.Services.Coupons
         }
 
         var changes = GetChanges(existingCoupon, couponEntity);
-        await SaveChangesHistory(couponEntity.id, changes, couponEntity.MarketingUserId);
+        await SaveChangesHistory(couponEntity.id, changes, couponEntity.MarketingUserid);
 
         _context.Entry(existingCoupon).CurrentValues.SetValues(couponEntity);
         await _context.SaveChangesAsync();

@@ -25,5 +25,9 @@ namespace Backengv2.Services.Coupons
         Task <IEnumerable<Coupon>> GetCouponsByJwtAsync(int id);   //Agregamos el listar por jwt
 
         Task AddCouponAsync(Coupon coupon);
-    }
+
+        Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync();
+       
+        Task<IEnumerable<CouponsDto>> GetCouponsForUserAsync(int userId, bool isAdmin);
+  }
 }

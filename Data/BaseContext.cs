@@ -22,7 +22,7 @@ namespace Backengv2.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Definir la relación entre Coupon y CouponHistory
+             // Definir la relación entre Coupon y CouponHistory
             modelBuilder.Entity<Coupon>()
                 .HasMany(c => c.CouponHistories)
                 .WithOne(ch => ch.Coupon)
@@ -32,10 +32,15 @@ namespace Backengv2.Data
             modelBuilder.Entity<Coupon>()
                 .HasOne(c => c.MarketingUser)
                 .WithMany()
-                .HasForeignKey(c => c.MarketingUserId);
+                .HasForeignKey(c => c.MarketingUserid);
 
-        }
-       // public DbSet <MarketingUser> MarketingUser {get; set; }
+           // Configurar la relación entre CouponHistory y MarketingUser
+            modelBuilder.Entity<CouponHistory>()
+                .HasOne(ch => ch.MarketingUser)
+                .WithMany()
+                .HasForeignKey(ch => ch.ChangedByUser);
+                }
+              // public DbSet <MarketingUser> MarketingUser {get; set; }
     }
 
     

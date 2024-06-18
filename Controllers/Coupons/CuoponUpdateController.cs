@@ -42,7 +42,7 @@ public class CouponUpdateController : ControllerBase
             return NotFound("Cupón no encontrado.");
         }
 
-       if (coupon.MarketingUserId != userId)
+       if (coupon.MarketingUserid != userId)
         {
             return Forbid("No tienes permiso para editar este cupón.");
         } 
