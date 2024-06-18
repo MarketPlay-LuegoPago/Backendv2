@@ -38,8 +38,25 @@ namespace Backengv2.Data
             modelBuilder.Entity<Coupon>()
                 .HasOne(c => c.MarketingUser)
                 .WithMany()
-                .HasForeignKey(c => c.MarketingUserId);
+                .HasForeignKey(c => c.MarketingUserid);
 
+             // Configurar la relación entre Coupon y MarketingUser
+            modelBuilder.Entity<Coupon>()
+            .HasOne(c => c.MarketingUser)
+            .WithMany()
+            .HasForeignKey(c => c.MarketingUserid);
+
+        // Configurar la relación entre CouponHistory y Coupon
+            modelBuilder.Entity<CouponHistory>()
+            .HasOne(ch => ch.Coupon)
+            .WithMany()
+            .HasForeignKey(ch => ch.CouponId);
+
+        // Configurar la relación entre CouponHistory y MarketingUser
+            modelBuilder.Entity<CouponHistory>()
+            .HasOne(ch => ch.MarketingUser)
+            .WithMany()
+            .HasForeignKey(ch => ch.ChangedByUser);
         }
     }
 

@@ -18,6 +18,7 @@ namespace Backengv2.Models
     public string? NewValue { get; set; }
     public Coupon? Coupon { get; set; }
     public int ?ChangedByUser { get; set; }
+    public MarketingUser? MarketingUser { get; set; }
     
     }
 }

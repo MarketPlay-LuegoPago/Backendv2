@@ -63,5 +63,15 @@ namespace Backengv2.Controllers
             var couponsDto = _mapper.Map<IEnumerable<CouponsDto>>(coupons);
             return Ok(couponsDto);
         }
+
+    [HttpGet("couponHistories")]
+    public async Task<ActionResult<IEnumerable<CouponHistoryDto>>> GetCouponHistories()
+    {
+        var couponHistories = await _couponRepository.GetAllCouponHistoriesAsync();
+        return Ok(couponHistories);
+    }
+
+
+
     }
 }

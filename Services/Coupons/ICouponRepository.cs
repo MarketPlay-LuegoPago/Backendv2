@@ -24,5 +24,7 @@ namespace Backengv2.Services.Coupons
         Task<IEnumerable<Coupon>> GetCouponsActiveAsync();
 
         Task AddCouponAsync(Coupon coupon);
+
+        Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync(); 
     }
 }

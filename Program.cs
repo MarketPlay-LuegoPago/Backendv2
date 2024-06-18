@@ -47,7 +47,7 @@ builder.Services.AddScoped<MailerSendService>();
 
 
 var app = builder.Build();
-app.UseMiddleware<ErrorHandlingMiddleware>();
+//app.UseMiddleware<ErrorHandlingMiddleware>();
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
