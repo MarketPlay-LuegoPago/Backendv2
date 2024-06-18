@@ -12,10 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+// Configuración inicial de la aplicación web
 var builder = WebApplication.CreateBuilder(args);
 
+// Clave para la autenticación JWT
 var key = Encoding.UTF8.GetBytes("ncjdncjvurbuedxwn233nnedxee+dfr-");
 
+// Configuración de la autenticación JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,21 +38,28 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Configuración de la autorización
 builder.Services.AddAuthorization();
+
+// Configuración para habilitar la exploración de API Endpoints
 builder.Services.AddEndpointsApiExplorer();
+
+// Configuración de Swagger
 builder.Services.AddSwaggerGen();
+
+// Configuración de controladores MVC
 builder.Services.AddControllers();
 
-
+// Configuración de AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
+// Configuración del contexto de base de datos
 builder.Services.AddDbContext<BaseContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("MySqlConnection"),
         Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.20-mysql")));
 
-
-
+// Configuración de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAnyOrigin", builder =>
@@ -60,39 +70,42 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Registro de dependencias de servicios
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 builder.Services.AddScoped<IMarketplaceUserRepository, MarketplaceUserRepository>();
 builder.Services.AddScoped<MailerSendService>();
 
+// Construcción de la aplicación
 var app = builder.Build();
 
+// Uso de CORS
 app.UseCors("AllowAnyOrigin");
+
+// Configuración de autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Uso de Swagger y Swagger UI
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseAuthentication();  // Agregamos permisos para DataConnection
+// Configuración adicional de autenticación y autorización
+app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseMiddleware<ErrorHandlingMiddleware>();
-
-//new AuthRepository(provider.GetRequiredService<BaseContext>(), "FTGUNMIMGI4MFI4J2RÑNUFRFFM4FN4874H4BBFHRF"));
-        
-//builder.Services.AddAutoMapper(typeof(StudentP rofile), typeof(Teacher Profile), typeof(ClassProfile));
-
-app.UseAuthentication();  //Agregamos permisos para DataConection
-app.UseAuthorization();
+// Mapeo de controladores
 app.MapControllers();
 
-// Configure the HTTP request pipeline.
+// Configuración adicional del pipeline de solicitudes HTTP según el entorno
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Redirección HTTPS y mapeo final de controladores
 app.UseHttpsRedirection();
 app.MapControllers();
 
+// Ejecución de la aplicación
 app.Run();

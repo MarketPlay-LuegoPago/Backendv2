@@ -1,14 +1,16 @@
-using Backengv2.Models;
-using Backengv2.Data;
-using BCrypt.Net;
-
+using Backengv2.Models; // Importación del espacio de nombres que contiene el modelo MarketingUser
+using Backengv2.Data; // Importación del espacio de nombres que contiene BaseContext
+using BCrypt.Net; // Importación del espacio de nombres que contiene BCrypt
 
 namespace Backend.Services
 {
+    // Interfaz que define métodos para autenticación y generación de tokens JWT
     public interface IAuthRepository
     {
-        bool VeriryPassword(string Password, string HashedPassword); //Metodo para Hashear la contraseña (Encriptar)
-        string GenerateToken(MarketingUser user); //Generamos el token que llamaremos en el controlador
-         
+        // Método para verificar si la contraseña coincide con el hash almacenado
+        bool VeriryPassword(string Password, string HashedPassword);
+
+        // Método para generar un token JWT para el usuario proporcionado
+        string GenerateToken(MarketingUser user);
     }
 }

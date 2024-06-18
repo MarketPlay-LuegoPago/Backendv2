@@ -12,67 +12,64 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backengv2.Controllers.Coupons
 {
-    [ApiController]
-[Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class CouponUpdateController : ControllerBase
-{
-    private readonly ICouponRepository _couponRepository;
-    private readonly IMapper _mapper;
-
-    public CouponUpdateController(ICouponRepository couponRepository, IMapper mapper)
+    [ApiController] // Indica que este controlador responde a solicitudes de API
+    [Route("api/[controller]")] // Define la ruta base para el controlador
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] // Requiere autorización con esquema de autenticación JWT Bearer
+    public class CouponUpdateController : ControllerBase // Hereda de ControllerBase para construir un controlador de API
     {
-        _couponRepository = couponRepository;
-        _mapper = mapper;
-    }
+        private readonly ICouponRepository _couponRepository; // Campo privado para el repositorio de cupones
+        private readonly IMapper _mapper; // Campo privado para el mapeador de objetos
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCoupon(int id, [FromBody] CuponUpdateDto cuponUpdateDto)
-    {
-      var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userIdClaim == null)
+        // Constructor que inyecta el repositorio de cupones y el mapeador de objetos
+        public CouponUpdateController(ICouponRepository couponRepository, IMapper mapper)
         {
-            return Unauthorized("Usuario no autenticado.");
+            _couponRepository = couponRepository;
+            _mapper = mapper;
         }
 
-        var userId = int.Parse(userIdClaim); 
-
-        var coupon = await _couponRepository.GetByIdAsync(id);
-        if (coupon == null)
+        // Acción HTTP PUT para actualizar un cupón por su ID
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCoupon(int id, [FromBody] CuponUpdateDto cuponUpdateDto)
         {
-            return NotFound("Cupón no encontrado.");
-        }
+            var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value; // Obtiene el ID de usuario del token JWT
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Usuario no autenticado."); // Devuelve un error si el usuario no está autenticado
+            }
 
-       if (coupon.MarketingUserid != userId)
-        {
-            return Forbid("No tienes permiso para editar este cupón.");
-        } 
+            var userId = int.Parse(userIdClaim); // Convierte el ID de usuario a entero
 
-        if (coupon.status == "redimido")
-        {
-            return BadRequest("El cupón no se puede editar porque ya ha sido utilizado.");
-        }
+            var coupon = await _couponRepository.GetByIdAsync(id); // Busca el cupón por su ID
+            if (coupon == null)
+            {
+                return NotFound("Cupón no encontrado."); // Devuelve un error 404 si el cupón no se encuentra
+            }
 
-        // Mapea los datos del objeto CouponDto al objeto Coupon
-        var couponEntity = _mapper.Map<Coupon>(cuponUpdateDto);
-        couponEntity.id = id; // Asegurar que el ID del cupón no cambie
+            if (coupon.MarketingUserid != userId)
+            {
+                return Forbid("No tienes permiso para editar este cupón."); // Devuelve un error si el usuario no tiene permiso para editar el cupón
+            }
 
-        try
-        {
-            await _couponRepository.UpdateCouponAsync(couponEntity);
+            if (coupon.status == "redimido")
+            {
+                return BadRequest("El cupón no se puede editar porque ya ha sido utilizado."); // Devuelve un error si el cupón ya ha sido utilizado
+            }
 
-            return Ok("Cupón actualizado correctamente.");
-        }
-        catch (Exception ex)
-        {
-            // Delegar el manejo de excepciones no controladas al Middleware de Manejo de Errores
-            throw; // Aquí el middleware capturará y manejará el error
+            // Mapea los datos del objeto CuponUpdateDto al objeto Coupon
+            var couponEntity = _mapper.Map<Coupon>(cuponUpdateDto);
+            couponEntity.id = id; // Asegura que el ID del cupón no cambie
+
+            try
+            {
+                await _couponRepository.UpdateCouponAsync(couponEntity); // Llama al método del repositorio para actualizar el cupón
+
+                return Ok("Cupón actualizado correctamente."); // Devuelve una respuesta HTTP 200 OK si el cupón se actualiza correctamente
+            }
+            catch (Exception ex)
+            {
+                // Delega el manejo de excepciones no controladas al Middleware de Manejo de Errores
+                throw; // El middleware capturará y manejará el error
+            }
         }
     }
 }
-
-}
-
-    
-
- 
