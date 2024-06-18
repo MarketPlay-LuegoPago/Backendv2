@@ -6,6 +6,8 @@ namespace Backengv2.Models
 {
     public class MarketingUser
     {
+        internal object id;
+
         [Key]
         public int Id { get; set; }
         public string? Username { get; set; }
