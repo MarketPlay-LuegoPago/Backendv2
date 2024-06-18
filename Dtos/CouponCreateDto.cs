@@ -32,7 +32,7 @@ namespace Backengv2.Dtos
         public string? UseType { get; set; }
 
         [Required]
-        public int QuantityUses { get; set; }
+        public int quantity_uses { get; set; }
 
         [Required]
         public decimal MinPurchaseAmount { get; set; }
