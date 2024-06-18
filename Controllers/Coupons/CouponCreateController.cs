@@ -36,7 +36,7 @@ public async Task<ActionResult<CouponsDto>> CreateCoupon([FromBody] CouponCreate
         return BadRequest(ModelState); // Devuelve los errores de validación del modelo
     }
 
-    var marketingUser = await _context.MarketingUsers.FirstOrDefaultAsync(u => u.Id == couponCreateDto.MarketingUserid);
+    var marketingUser = await _context.MarketingUsers.FirstOrDefaultAsync(u => u.id == couponCreateDto.MarketingUserid);
     if (marketingUser == null)
     {
         return BadRequest("El ID de usuario de marketing proporcionado no es válido.");

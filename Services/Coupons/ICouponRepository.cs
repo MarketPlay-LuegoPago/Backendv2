@@ -22,12 +22,23 @@ namespace Backengv2.Services.Coupons
         Task<IEnumerable<Coupon>> GetCouponsByActivationDateAsync(DateTime ActivationDate);
         Task<IEnumerable<Coupon>> GetCouponsByExpirationDateAsync(DateTime ExpirationDate);
         Task<IEnumerable<Coupon>> GetCouponsActiveAsync();
-        Task <IEnumerable<Coupon>> GetCouponsByJwtAsync(int id);   //Agregamos el listar por jwt
+       
 
         Task AddCouponAsync(Coupon coupon);
 
         Task<IEnumerable<CouponHistoryDto>> GetAllCouponHistoriesAsync();
        
         Task<IEnumerable<CouponsDto>> GetCouponsForUserAsync(int userId, bool isAdmin);
-  }
+  
+
+        Task<Coupon> GetById(int id);
+        Task DeleteCouponAsync(Coupon coupon);
+
+      //  Task<Coupon?> GetByIdAsync(int id);
+        Task statuschangeCouponAsync(Coupon coupon);
+            Task<bool> IsCouponRedeemedAsync(int userId, int couponId);
+    Task AddCouponUsageAsync(CouponUsage usage);
+    Task<Coupon> GetCouponByIdAsync(int couponId);
+
+    }
 }

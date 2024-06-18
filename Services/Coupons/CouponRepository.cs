@@ -258,11 +258,153 @@ namespace Backengv2.Services.Coupons
     }
 
 
-        //Clase para mostrar Cupones por
-        public Task<IEnumerable<Coupon>> GetCouponsByJwtAsync(int id)
+     public async Task<Coupon?> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Coupons.FindAsync(id);
         }
+
+        public async Task DeleteCouponAsync(Coupon coupon)
+        {
+            _context.Coupons.Update(coupon);
+            await _context.SaveChangesAsync();
+        }
+
+public async Task statuschangeCouponAsync(Coupon coupon)
+{
+    if (_context == null)
+    {
+        throw new InvalidOperationException("El contexto de la base de datos no está configurado correctamente.");
+    }
+
+    // Obtener el estado anterior para el historial de cambio
+    var couponInDb = await _context.Coupons.AsNoTracking().FirstOrDefaultAsync(c => c.id == coupon.id);
+    if (couponInDb == null)
+    {
+        throw new InvalidOperationException("Cupón no encontrado en la base de datos.");
+    }
+
+    // Actualiza el cupón en la base de datos
+    _context.Coupons.Update(coupon);
+    await _context.SaveChangesAsync();
+
+    // Registro de la historia del cambio
+    var couponHistory = new CouponHistory
+    {
+        CouponId = coupon.id,
+        ChangeDate = DateTime.UtcNow,
+        FieldChanged = "status",
+        OldValue = couponInDb.status, // Estado anterior
+        NewValue = coupon.status,      // Nuevo estado
+        ChangedByUser = coupon.MarketingUserid
+    };
+
+    // Almacenando la historia del cambio
+    try
+    {
+        await _context.CouponHistories.AddAsync(couponHistory);
+        await _context.SaveChangesAsync();
+    }
+    catch (Exception ex)
+    {
+        throw new InvalidOperationException("Error al registrar el cambio de estado del cupón.", ex);
+    }
+}
+
+        public async Task<bool> IsCouponRedeemedAsync(int userId, int couponId)
+            {
+                return await _context.CouponUsages
+                    .AnyAsync(u => u.userId == userId && u.CouponId == couponId);
+            }
+
+            public async Task AddCouponUsageAsync(CouponUsage usage)
+            {
+                await _context.CouponUsages.AddAsync(usage);
+                await _context.SaveChangesAsync();
+            }
+
+    public async Task<Coupon> GetCouponByIdAsync(int couponId)
+    {
+        return await _context.Coupons.FindAsync(couponId);
+    }
+
+
+
+        /* 
+             public async Task<Coupon?> GetById(int id)
+                {
+                    return await _context.Coupons.FindAsync(id);
+                }
+
+                public async Task DeleteCouponAsync(Coupon coupon)
+                {
+                    _context.Coupons.Update(coupon);
+                    await _context.SaveChangesAsync();
+                }
+
+        public async Task statuschangeCouponAsync(Coupon coupon)
+        {
+            if (_context == null)
+            {
+                throw new InvalidOperationException("El contexto de la base de datos no está configurado correctamente.");
+            }
+
+            // Obtener el estado anterior para el historial de cambio
+            var couponInDb = await _context.Coupons.AsNoTracking().FirstOrDefaultAsync(c => c.id == coupon.id);
+            if (couponInDb == null)
+            {
+                throw new InvalidOperationException("Cupón no encontrado en la base de datos.");
+            }
+
+            // Actualiza el cupón en la base de datos
+            _context.Coupons.Update(coupon);
+            await _context.SaveChangesAsync();
+
+            // Registro de la historia del cambio
+            var couponHistory = new CouponHistory
+            {
+                CouponId = coupon.id,
+                ChangeDate = DateTime.UtcNow,
+                FieldChanged = "status",
+                OldValue = couponInDb.status, // Estado anterior
+                NewValue = coupon.status,      // Nuevo estado
+                ChangedByUser = coupon.MarketingUserId
+            };
+
+            // Almacenando la historia del cambio
+            try
+            {
+                await _context.CouponHistories.AddAsync(couponHistory);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error al registrar el cambio de estado del cupón.", ex);
+            }
+        }
+
+                public async Task<bool> IsCouponRedeemedAsync(int userId, int couponId)
+                    {
+                        return await _context.CouponUsages
+                            .AnyAsync(u => u.userId == userId && u.CouponId == couponId);
+                    }
+
+                    public async Task AddCouponUsageAsync(CouponUsage usage)
+                    {
+                        await _context.CouponUsages.AddAsync(usage);
+                        await _context.SaveChangesAsync();
+                    }
+
+            public async Task<Coupon> GetCouponByIdAsync(int couponId)
+            {
+                return await _context.Coupons.FindAsync(couponId);
+            }
+
+
+                //Clase para mostrar Cupones por
+                public Task<IEnumerable<Coupon>> GetCouponsByJwtAsync(int id)
+                {
+                    throw new NotImplementedException();
+                } */
     }
 
 }

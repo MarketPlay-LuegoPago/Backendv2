@@ -1,31 +1,65 @@
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 using Backengv2.Data;
+using Backengv2.Dtos;
+using Backengv2.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using backend.Dto;
-using Backend.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 
-namespace Authcontroller
+
+
+namespace Backengv2.Controllers.Login
 {
-    public class LoginController : ControllerBase
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository _authRepository;
-        private readonly BaseContext _context;
-        public LoginController(IAuthRepository authRepository ,BaseContext context)
-        {
-            _context = context;
-            _authRepository = authRepository;
-        }
-        [HttpPost("Login")]
-         public async Task <IActionResult>Login([FromBody] Login login) 
-         {
-            var user = await _context.MarketingUsers.FirstOrDefaultAsync(u => u.Email == login.Email && u.Password == login.Password);
-            if( user == null)
-            {
-                return Unauthorized("The Query is invalid or the user doesn´t exist");
+
+         private readonly BaseContext _context;
+      public AuthController(BaseContext context)
+      {
+          _context = context;
             }
-            var token = _authRepository.GenerateToken(user);
-            return Ok(new {token});
-         }
-    } 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] Autorize token)
+        {
+            var MarketingUser = await _context.MarketingUsers
+                .FirstOrDefaultAsync(e => e.Email == token.Email && e.Password == token.Password);
+            
+            if (MarketingUser == null)
+            {
+                return BadRequest("Error en Correo o Contraseña");
+            }
+
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ncjdncjvurbuedxwn233nnedxee+dfr-"));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, MarketingUser.id.ToString())
+            };
+
+            var tokenOptions = new JwtSecurityToken(
+                issuer: "https://localhost:5205",
+                audience: "https://localhost:5205",
+                claims: claims,
+                expires: DateTime.Now.AddMonths(1),
+                signingCredentials: signinCredentials
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new { Token = tokenString });
+        }
+    }
+
+
+
 }
