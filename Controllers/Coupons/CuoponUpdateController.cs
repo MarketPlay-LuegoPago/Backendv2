@@ -6,6 +6,7 @@ using Backengv2.Data;
 using Backengv2.Dtos;
 using Backengv2.Models;
 using Backengv2.Services.Coupons;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace Backengv2.Controllers.Coupons
 {
     [ApiController]
 [Route("api/[controller]")]
-//[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CouponUpdateController : ControllerBase
 {
     private readonly ICouponRepository _couponRepository;

@@ -24,5 +24,15 @@ namespace Backengv2.Services.Coupons
         Task<IEnumerable<Coupon>> GetCouponsActiveAsync();
 
         Task AddCouponAsync(Coupon coupon);
+
+        Task<Coupon> GetById(int id);
+        Task DeleteCouponAsync(Coupon coupon);
+
+      //  Task<Coupon?> GetByIdAsync(int id);
+        Task statuschangeCouponAsync(Coupon coupon);
+            Task<bool> IsCouponRedeemedAsync(int userId, int couponId);
+    Task AddCouponUsageAsync(CouponUsage usage);
+    Task<Coupon> GetCouponByIdAsync(int couponId);
+
     }
 }

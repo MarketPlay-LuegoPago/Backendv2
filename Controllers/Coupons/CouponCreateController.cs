@@ -30,7 +30,7 @@ namespace Backengv2.Controllers.Coupons
       {
           try
           {
-              var marketingUser = await _context.MarketingUsers.FirstOrDefaultAsync(u => u.Id == couponCreateDto.MarketingUserId);
+              var marketingUser = await _context.MarketingUsers.FirstOrDefaultAsync(u => u.id == couponCreateDto.MarketingUserId);
               if (marketingUser == null)
               {
                   return BadRequest("El ID de usuario de marketing proporcionado no es válido.");

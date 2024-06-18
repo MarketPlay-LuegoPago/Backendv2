@@ -38,9 +38,7 @@ CREATE TABLE Coupons (
     FOREIGN KEY (MarketingUserId) REFERENCES MarketingUser(id)
 );
 
-drop Table Coupons
 
-drop Table CouponsSent
 
 
 INSERT INTO MarketplaceUser (username, Email, password) 
@@ -74,8 +72,8 @@ CREATE TABLE CouponHistories (
 ALTER TABLE CouponHistories
 CHANGE COLUMN OldValue OldValue VARCHAR(55);
 
-ALTER TABLE CouponHistories
-ADD COLUMN ChangedByUser INT;
+ALTER TABLE CouponUsage
+ADD COLUMN PurchaseId INT;
 
 
 -- Tabla UserRole
@@ -102,17 +100,27 @@ CREATE TABLE Purchase (
     FOREIGN KEY (user_id) REFERENCES MarketplaceUser(id)
 );
 
+INSERT INTO `Purchase` (user_id, date, amount) VALUES (1, '2024-06-18', 18.00);
+
+
+
+
+
 -- Tabla CouponUsage
-CREATE TABLE CouponUsage (
-    couponId INT,
+CREATE TABLE CouponUsages (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    CouponId INT,
     userId INT,
+    PurchaseId INT,
     usage_date DATE,
     transaction_amount DECIMAL(10, 2),
     status ENUM('redeemed', 'pending'),
-    PRIMARY KEY (couponId, userId),
-    FOREIGN KEY (couponId) REFERENCES Coupons(coupon_id),
+    FOREIGN KEY (couponId) REFERENCES Coupons(id),
+    FOREIGN KEY (PurchaseId) REFERENCES Purchase(id),
     FOREIGN KEY (userId) REFERENCES MarketplaceUser(id)
 );
+
+DROP Table CouponUsages
 
 -- Tabla PurchaseCoupon
 CREATE TABLE PurchaseCoupon (
