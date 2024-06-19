@@ -24,7 +24,7 @@ namespace Backengv2.Controllers.Coupons // Define el espacio de nombres para el 
 
         // Constructor que inyecta el contexto de la base de datos, el repositorio de cupones y el mapeador de objetos
         public CouponDeleteController(BaseContext context, ICouponRepository couponRepository, IMapper mapper)
-        { 
+        {
             _context = context;
             _couponRepository = couponRepository;
             _mapper = mapper;
@@ -32,7 +32,7 @@ namespace Backengv2.Controllers.Coupons // Define el espacio de nombres para el 
 
         // Acción HTTP PUT para eliminar un cupón por su ID
         [HttpPut]
-        [Route("/delete/{id}")] // Define la ruta específica para eliminar un cupón
+        //[Route("/delete/{id}")] // Define la ruta específica para eliminar un cupón
         public async Task<IActionResult> DeleteCoupon(int id)
         {
             // Obtiene el ID del usuario autenticado desde el token JWT
@@ -44,7 +44,7 @@ namespace Backengv2.Controllers.Coupons // Define el espacio de nombres para el 
             }
 
             // Convierte el ID del usuario a un entero
-            var userId = int.Parse(userIdClaim); 
+            var userId = int.Parse(userIdClaim);
 
             // Busca el cupón por su ID en el repositorio de cupones
             var coupon = await _couponRepository.GetById(id);
