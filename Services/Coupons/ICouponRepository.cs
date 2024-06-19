@@ -39,5 +39,9 @@ namespace Backengv2.Services.Coupons
 
         // Método para obtener cupones por ID de usuario de marketing
         Task<List<CouponsDto>> GetCouponsByMarketingUserIdAsync(int marketingUserId);
+
+        Task<Coupon> GetCouponByIdAsync(int couponId);
+        Task<Coupon?> GetById(int id);
+        Task<bool> SendCouponToCustomersAsync(int couponId, string message, List<int> marketplaceUserIds);
     }
 }
